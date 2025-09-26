@@ -594,7 +594,13 @@
                 <h3>Recent Withdrawals</h3>`;
                 database.ref('withdrawals').orderByChild('userId').equalTo(userId).limitToLast(5).once('value',s=>{const h=s.val();if(!h)content+="<p>No withdrawal history found.</p>";else{content+='<table><thead><tr><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';Object.values(h).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).forEach(r=>{content+=`<tr><td>${new Date(r.timestamp).toLocaleDateString()}</td><td>${r.amount}</td><td>${r.status}</td></tr>`;});content+='</tbody></table>';}modalBody.innerHTML=content;modal.style.display='block';});
             }
+            
+            // নতুন নিয়ন্ত্রণ যুক্ত করা হয়েছে
             window.editUsername = function() {
+                if (!userData.userName) {
+                    alert("User data is still loading. Please try again in a moment.");
+                    return;
+                }
                 const newUsername = prompt("Enter your new username (without @):", userData.userName.substring(1));
                 if (newUsername && newUsername.trim()) {
                     const finalUsername = "@" + newUsername.trim();
@@ -607,6 +613,7 @@
                     });
                 }
             }
+
             window.showTransactionHistory = function() {
                 closeModal();
                 modalBody.innerHTML = '<h2>Transaction History</h2><p>Loading...</p>';
@@ -658,7 +665,29 @@
             }
 
             window.showSupportModal = function() { modalBody.innerHTML=`<h2>Contact Support</h2><p>Describe your issue below.</p><textarea id="support-message" rows="5" placeholder="Type your message here..." style="width:100%;"></textarea><button onclick="submitSupportTicket()" style="width:100%;padding:10px;margin-top:10px;">Send Message</button>`;modal.style.display='block'; }
-            window.submitSupportTicket = function() { const msg=document.getElementById('support-message').value.trim();if(msg)database.ref('supportTickets').push().set({userId,userName:userData.userName,message:msg,timestamp:new Date().toISOString(),status:'Open'}).then(()=>{alert('Message sent!');closeModal();});else alert('Please type a message.'); }
+            
+            // নতুন নিয়ন্ত্রণ যুক্ত করা হয়েছে
+            window.submitSupportTicket = function() {
+                const msg = document.getElementById('support-message').value.trim();
+                if (msg) {
+                    if (!userData.userName) {
+                        alert("User data is still loading. Please try again in a moment.");
+                        return;
+                    }
+                    database.ref('supportTickets').push().set({
+                        userId,
+                        userName: userData.userName,
+                        message: msg,
+                        timestamp: new Date().toISOString(),
+                        status: 'Open'
+                    }).then(() => {
+                        alert('Message sent!');
+                        closeModal();
+                    });
+                } else {
+                    alert('Please type a message.');
+                }
+            }
         } 
     </script>
 </body>
