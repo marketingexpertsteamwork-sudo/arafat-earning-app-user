@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The_Arafat_Earnings</title>
+    <style>
+        :root {
+            --primary-color: green; /* নতুন: এই রঙটি এখন অ্যাডমিন প্যানেল থেকে পরিবর্তনযোগ্য */
+        }
+        body { margin: 0; padding: 20px; background-color: #121212; color: #fff; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .container { text-align: center; background: #1f1f1f; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); width: 100%; max-width: 350px; box-sizing: border-box; }
+        .announcement-box { background-color: #ffc107; color: #333; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center; display: none; }
+        /* নতুন যুক্ত করা কোড: বোনাস ইভেন্ট নোটিশের স্টাইল */
+        .bonus-event-notice { background-color: #dc3545; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-align: center; display: none; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
+        .container h1 { font-size: 22px; color: var(--primary-color); margin-bottom: 10px; }
+        .developer { font-size: 12px; background-color: var(--primary-color); padding: 5px 10px; border-radius: 5px; margin-bottom: 15px; display: inline-block; cursor: pointer; }
+        .stats p { margin: 8px 0; font-size: 16px; }
+        .progress-circle { width: 90px; height: 90px; border: 5px solid var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 15px auto; font-size: 20px; font-weight: bold; }
+        .buttons button, .auth-container button { width: 100%; margin: 6px 0; padding: 12px; font-size: 16px; border: none; border-radius: 8px; color: white; background: var(--primary-color); cursor: pointer; transition: background-color 0.3s; }
+        .buttons button:hover, .auth-container button:hover { background: darkorange; }
+        .buttons button:disabled { background-color: #555; cursor: not-allowed; }
+        .secondary-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .secondary-buttons button { background-color: #007bff; flex-grow: 1; }
+        .secondary-buttons button:hover { background-color: #0056b3; }
+        .withdraw-section { margin-top: 20px; display: none; padding: 20px; background-color: #2a2a2a; border-radius: 10px; }
+        .withdraw-section input, .withdraw-section select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 2px solid #555; background-color: #333; color: #fff; box-sizing: border-box; }
+        #withdraw-status { color: orange; font-size: 14px; margin-top: 10px; min-height: 20px; }
+        .user-info p { font-size: 16px; margin: 5px 0; font-weight: bold; }
+        /* নতুন: User Level Badge স্টাইল */
+        .user-info .user-level-badge { padding: 3px 10px; background-color: #ffc107; color: #1f1f1f; border-radius: 12px; font-size: 12px; margin-left: 8px; vertical-align: middle; }
+        .update-notice { background-color: #dc3545; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 16px; text-align: center; display: none; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
+        .modal-content { background-color: #2a2a2a; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 8px; color: #fff; }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-content table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .modal-content th, .modal-content td { border: 1px solid #555; padding: 8px; text-align: left;}
+        .modal-content th { background-color: var(--primary-color); }
+        .task-item { border: 1px solid #444; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        .task-item h4 { margin: 0 0 5px 0; color: #ffc107; }
+        .task-item p { margin: 0 0 10px 0; font-size: 14px; }
+        .task-item button { width: auto; padding: 8px 12px; font-size: 14px; }
+        #logout-btn { background-color: #dc3545; margin-top: 10px; }
+
+        /* নতুন যুক্ত করা কোড: উন্নত লগইন/রেজিস্ট্রেশন ফর্মের স্টাইল */
+        #auth-container { padding: 10px 25px 25px 25px; }
+        #auth-container h1 { font-size: 24px; color: var(--primary-color); margin-bottom: 8px; }
+        #auth-container p { font-size: 14px; color: #ccc; margin-bottom: 20px; }
+        #auth-container input {
+            width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px;
+            border: 1px solid #444; background-color: #2a2a2a; color: #fff;
+            box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        #auth-container input:focus {
+            border-color: var(--primary-color); box-shadow: 0 0 5px var(--primary-color); outline: none;
+        }
+        .link-btn {
+            background: none !important; border: none; color: #00aaff; cursor: pointer;
+            padding: 10px 0; width: 100%; text-align: center; font-size: 14px;
+        }
+        .link-btn:hover { text-decoration: underline; }
+        .link-btn.small { font-size: 12px; color: #aaa; }
+        .auth-error { color: orange; font-size: 14px; min-height: 20px; text-align: center; }
+    </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <!-- নতুন এবং উন্নত লগইন/রেজিস্ট্রেশন ফরম -->
+    <div class="container" id="auth-container">
+        <!-- লগইন ফর্ম -->
+        <div id="login-form">
+            <h1>Welcome Back!</h1>
+            <p>Login to continue your journey.</p>
+            <input type="email" id="login-email" placeholder="Enter your email" required>
+            <input type="password" id="login-password" placeholder="Enter your password" required>
+            <p class="auth-error" id="login-error"></p>
+            <button onclick="loginUser()">Login</button>
+            <button class="link-btn" onclick="toggleAuthForms()">Don't have an account? Register</button>
+            <button class="link-btn small" onclick="resetPassword()">Forgot Password?</button>
+        </div>
+
+        <!-- রেজিস্ট্রেশন ফর্ম -->
+        <div id="register-form" style="display: none;">
+            <h1>Create Account</h1>
+            <p>Join and start earning today!</p>
+            <input type="email" id="register-email" placeholder="Enter your email" required>
+            <input type="text" id="register-username" placeholder="Choose a username" required>
+            <input type="password" id="register-password" placeholder="Create a password" required>
+            <input type="password" id="register-password-confirm" placeholder="Confirm your password" required>
+            <input type="text" id="register-referral" placeholder="Referral Code (Optional)">
+            <p class="auth-error" id="register-error"></p>
+            <button onclick="registerUser()">Register</button>
+            <button class="link-btn" onclick="toggleAuthForms()">Already have an account? Login</button>
+        </div>
+    </div>
+
+    <!-- মূল অ্যাপ যা লগইন করার পর দেখা যাবে -->
+    <div class="container" id="app-container" style="display:none;">
+        <div class="announcement-box" id="announcement-box"></div>
+        <!-- নতুন যুক্ত করা কোড: বোনাস ইভেন্ট নোটিশ দেখানোর স্থান -->
+        <div class="bonus-event-notice" id="bonus-event-notice"></div>
+        <div class="update-notice" id="update-notice">Please update your app to the latest version to continue.</div>
+        <h1 id="app-title">The_Anisur_Earnings</h1>
+        <div class="developer" id="dev-info" onclick="window.location.href='https://t.me/juelranacpa1'">Developer by JR Zone 2025</div>
+        <div class="user-info">
+            <p>Welcome, <span id="user-name">...</span><span id="user-level-badge" class="user-level-badge"></span></p>
+        </div>
+        <div class="stats">
+            <p>Watched Ads: <span id="watched-ads">0</span></p>
+            <p>Earned Points: <span id="earned-points">0.00</span></p>
+            <p>Today's Ads: <span id="daily-ads-watched">0</span> / <span id="daily-limit">...</span></p>
+        </div>
+        <div class="progress-circle"><span id="ads-progress">0%</span></div>
+        <div class="buttons">
+            <button id="watch-ad-btn" onclick="watchAd()">Watch Ad</button>
+            <button id="auto-ad-btn" onclick="startAutoAds()">Auto Show Ads</button>
+            <button id="stop-auto-btn" onclick="stopAutoAds()" disabled>Stop Auto Ads</button>
+            <button id="withdraw-btn" onclick="showWithdrawForm()">Withdraw</button>
+        </div>
+        <div class="secondary-buttons">
+            <button id="daily-bonus-btn" onclick="claimDailyBonus()">Daily Bonus</button>
+            <button onclick="showTasksModal()">Tasks</button>
+            <button onclick="showProfileModal()">My Profile</button>
+            <button onclick="showLeaderboard()">Leaderboard</button>
+            <button onclick="showSupportModal()">Support</button>
+        </div>
+        <div class="withdraw-section" id="withdraw-section">
+            <h3 style="color: orange; margin-bottom: 15px;">Withdrawal Request</h3>
+            <!-- নতুন যুক্ত করা কোড: উইথড্রয়াল ফি দেখানোর স্থান -->
+            <p id="withdraw-fee-info" style="font-size: 13px; color: #ffc107; margin-bottom: 10px;"></p>
+            <input type="number" id="withdraw-amount" placeholder="Enter Points to Withdraw" />
+            <select id="payment-method"></select>
+            <input type="text" id="withdraw-phone" placeholder="Enter Phone Number" />
+            <button onclick="withdrawPoints()">Submit Request</button>
+            <p id="withdraw-status"></p>
+        </div>
+        <button id="logout-btn" onclick="logoutUser()">Logout</button>
+    </div>
+
+    <div id="appModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const bootstrapConfig = { databaseURL: "https://the-arafat-earnings-default-rtdb.firebaseio.com" };
+        const bootstrapApp = firebase.initializeApp(bootstrapConfig, 'bootstrap-app');
+        const db = bootstrapApp.database();
+        let firebaseConfig;
+
+        db.ref('appConfig/firebase').once('value').then(snapshot => {
+            firebaseConfig = snapshot.val();
+            if (firebaseConfig && firebaseConfig.apiKey) {
+                firebase.initializeApp(firebaseConfig);
+                setupAuthentication(); 
+            } else { throw new Error("Firebase configuration not found."); }
+        }).catch(error => {
+            console.error("Configuration Load Error:", error);
+            document.body.innerHTML = `<div style="text-align:center; padding: 50px; color: white;"><h1>Application Error</h1></div>`;
+        });
+
+        
+        function setupAuthentication() {
+            const auth = firebase.auth();
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    document.getElementById('auth-container').style.display = 'none';
+                    document.getElementById('app-container').style.display = 'block';
+                    initializeAppLogic(user); 
+                } else {
+                    document.getElementById('auth-container').style.display = 'block';
+                    document.getElementById('app-container').style.display = 'none';
+                }
+            });
+        }
+
+        // নতুন যুক্ত করা কোড: লগইন/রেজিস্ট্রেশন ফর্ম अदল-বদল করার ফাংশন
+        function toggleAuthForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            document.getElementById('login-error').innerText = '';
+            document.getElementById('register-error').innerText = '';
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+        
+        function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(err => errorEl.innerText = err.message);
+        }
+
+        function resetPassword() {
+            const email = document.getElementById('login-email').value;
+            const errorEl = document.getElementById('login-error');
+            if (!email) {
+                errorEl.innerText = "Please enter your email in the login form to reset password.";
+                return;
+            }
+            firebase.auth().sendPasswordResetEmail(email)
+                .then(() => {
+                    alert("A password reset link has been sent to your email address.");
+                    errorEl.innerText = "";
+                })
+                .catch(err => errorEl.innerText = err.message);
+        }
+
+        function registerUser() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-password-confirm').value;
+            const username = document.getElementById('register-username').value.trim();
+            const referralCode = document.getElementById('register-referral').value.trim();
+            const errorEl = document.getElementById('register-error');
+
+            if (!username) { errorEl.innerText = "Please enter a username."; return; }
+            if (password !== confirmPassword) { errorEl.innerText = "Passwords do not match."; return; }
+
+            firebase.database().ref('users').orderByChild('userName').equalTo("@" + username).once('value', snapshot => {
+                if (snapshot.exists()) {
+                    errorEl.innerText = "This username is already taken. Please choose another one.";
+                    return;
+                }
+                
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        const userId = userCredential.user.uid;
+                        const finalUsername = "@" + username;
+                        const initialUserData = {
+                            userName: finalUsername, watchedAds: 0, earnedPoints: 0,
+                            isBanned: false, lastAdWatchDate: '', dailyAdsWatched: 0,
+                            createdAt: new Date().toISOString(), referralsMade: 0,
+                            adsDisabled: false // নতুন: ডিফল্ট ভ্যালু
+                        };
+
+                        if (referralCode) {
+                            handleReferral(referralCode, userId, initialUserData);
+                        } else {
+                            firebase.database().ref('users/' + userId).set(initialUserData);
+                        }
+                    })
+                    .catch(err => errorEl.innerText = err.message);
+            });
+        }
+        function logoutUser() {
+            if (confirm("Are you sure you want to logout?")) {
+                firebase.auth().signOut();
+            }
+        }
+        
+        function initializeAppLogic(user) {
+            const database = firebase.database();
+            const currentAppVersion = "1.0";
+            const userId = user.uid; 
+
+            let userData = {}, earnedPoints = 0.00, watchedAdsCount = 0, autoAdInterval;
+            
+            // নতুন ডিফল্ট সেটিংস সহ আপডেটেড
+            let appSettings = { 
+                minWithdrawPoints: 5, pointsPerAd: 1.00, autoAdIntervalSeconds: 5, adZoneId: '', backupAdZoneId: '', 
+                paymentMethods: ['bkash'], announcement: '', adsEnabled: true, dailyAdLimit: 20, referrerBonus: 5, 
+                refereeBonus: 2, dailyCheckinBonus: 1, currentVersion: "1.0", appName: "The_Anisur_Earnings",
+                devInfo: "Developer by JR Zone 2025", withdrawalFeePercentage: 0, primaryColor: 'green',
+                userLevels: '[{"name":"Bronze","minAds":100,"multiplier":1.1}]', 
+                bonusEvent: { multiplier: 1, expiresAt: 0 } 
+            };
+            
+            const userRef = database.ref('users/' + userId);
+            const settingsRef = database.ref('settings');
+
+            function logTransaction(type, amount, details) {
+                database.ref(`transactions/${userId}`).push({
+                    type: type, amount: amount, details: details, timestamp: new Date().toISOString()
+                });
+            }
+            
+            async function handleReferral(referralCode, newUserId, newUserData) {
+                const referrerSnapshot = await database.ref('users').orderByChild('userName').equalTo(referralCode).once('value');
+                if (referrerSnapshot.exists()) {
+                    const referrerData = referrerSnapshot.val();
+                    const referrerId = Object.keys(referrerData)[0];
+                    const referrer = referrerData[referrerId];
+
+                    const refereeBonus = appSettings.refereeBonus || 0;
+                    const referrerBonus = appSettings.referrerBonus || 0;
+
+                    newUserData.earnedPoints += refereeBonus;
+                    newUserData.referredBy = referrerId;
+                    
+                    await database.ref('users/' + newUserId).set(newUserData);
+                    if (refereeBonus > 0) logTransaction('referee_bonus', refereeBonus, `Bonus for joining with code: ${referralCode}`);
+
+                    const newReferrerPoints = (referrer.earnedPoints || 0) + referrerBonus;
+                    const newReferralsMade = (referrer.referralsMade || 0) + 1;
+                    await database.ref('users/' + referrerId).update({ earnedPoints: newReferrerPoints, referralsMade: newReferralsMade });
+                    if (referrerBonus > 0) {
+                        database.ref(`transactions/${referrerId}`).push({
+                            type: 'referrer_bonus', amount: referrerBonus,
+                            details: `Bonus for referring user: ${newUserData.userName}`,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                } else {
+                    await database.ref('users/' + newUserId).set(newUserData);
+                }
+            }
+
+            settingsRef.on('value', (snapshot) => {
+                const settings = snapshot.val();
+                if (settings) {
+                    appSettings = { ...appSettings, ...settings };
+                    if (appSettings.currentVersion && appSettings.currentVersion !== currentAppVersion) {
+                        document.getElementById('update-notice').style.display = 'block';
+                        document.getElementById('app-container').style.pointerEvents = 'none';
+                        return;
+                    }
+                    if (!window.adsInitialized) { initializeAds(appSettings.adZoneId, appSettings.backupAdZoneId); }
+                    
+                    // নতুন যুক্ত করা কোড: ডায়নামিক UI আপডেট
+                    document.documentElement.style.setProperty('--primary-color', appSettings.primaryColor || 'green');
+                    document.getElementById('app-title').innerText = appSettings.appName || "Earnings App";
+                    document.getElementById('dev-info').innerText = appSettings.devInfo || "Developer Info";
+                    
+                    const bonusNoticeEl = document.getElementById('bonus-event-notice');
+                    if (appSettings.bonusEvent && appSettings.bonusEvent.expiresAt > Date.now()) {
+                        bonusNoticeEl.innerText = `BONUS EVENT! All ad earnings are multiplied by x${appSettings.bonusEvent.multiplier}!`;
+                        bonusNoticeEl.style.display = 'block';
+                    } else {
+                        bonusNoticeEl.style.display = 'none';
+                    }
+
+                    const feeInfoEl = document.getElementById('withdraw-fee-info');
+                    if(appSettings.withdrawalFeePercentage > 0) {
+                        feeInfoEl.innerText = `Note: A ${appSettings.withdrawalFeePercentage}% processing fee will be applied to all withdrawals.`;
+                    } else {
+                        feeInfoEl.innerText = '';
+                    }
+
+                    updateUI();
+                }
+            });
+            
+            function updateDynamicUI() {
+                const watchAdBtn = document.getElementById('watch-ad-btn');
+                const autoAdBtn = document.getElementById('auto-ad-btn');
+                const adsEnabledByAdmin = appSettings.adsEnabled;
+                
+                // নতুন যুক্ত করা কোড: নির্দিষ্ট ব্যবহারকারীর জন্য বিজ্ঞাপন নিষ্ক্রিয় করা
+                if (userData.adsDisabled) {
+                    watchAdBtn.innerText = "Ads Disabled for You"; watchAdBtn.disabled = true;
+                    autoAdBtn.disabled = true; stopAutoAds(); return;
+                }
+
+                if (!adsEnabledByAdmin) { watchAdBtn.innerText = "Ads Disabled by Admin"; watchAdBtn.disabled = true; autoAdBtn.disabled = true; stopAutoAds(); } 
+                else if (!window.adFunctionReady) { watchAdBtn.innerText = window.adLoadingStatus || "Loading Ads..."; watchAdBtn.disabled = true; autoAdBtn.disabled = true; } 
+                else { watchAdBtn.innerText = "Watch Ad"; watchAdBtn.disabled = false; autoAdBtn.disabled = false; }
+            }
+
+            userRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.isBanned) { document.body.innerHTML = `<div style="text-align:center; padding-top: 50px;"><h1>Access Denied</h1><p>Your account has been banned.</p></div>`; return; }
+                if (data) {
+                    userData = data;
+                    watchedAdsCount = data.watchedAds || 0;
+                    earnedPoints = data.earnedPoints || 0.00;
+                    document.getElementById("user-name").textContent = data.userName || "User";
+                    if (data.notice) { alert(`Admin Notice: ${data.notice}`); userRef.child('notice').remove(); }
+                } else {
+                    const initialUsername = user.email.split('@')[0];
+                    userData = { userName: "@" + initialUsername, watchedAds:0, earnedPoints:0, isBanned:false, lastAdWatchDate:'', dailyAdsWatched:0, createdAt:new Date().toISOString(), referralsMade: 0, adsDisabled: false };
+                    userRef.set(userData);
+                }
+                updateUI();
+            });
+            
+            function getTodayDateString() {
+                const today = new Date();
+                return `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+            }
+            
+            // নতুন যুক্ত করা কোড: ব্যবহারকারীর লেভেল নির্ণয়ের ফাংশন
+            function getUserLevel() {
+                try {
+                    const levels = JSON.parse(appSettings.userLevels || '[]');
+                    let currentLevel = { name: "Newbie", multiplier: 1.0 };
+                    if (!Array.isArray(levels)) return currentLevel;
+                    const sortedLevels = levels.sort((a, b) => (b.minAds || 0) - (a.minAds || 0));
+                    for (const level of sortedLevels) {
+                        if (watchedAdsCount >= level.minAds) {
+                            currentLevel = level;
+                            break;
+                        }
+                    }
+                    return currentLevel;
+                } catch (e) {
+                    console.error("Could not parse user levels:", e);
+                    return { name: "Newbie", multiplier: 1.0 };
+                }
+            }
+
+            function checkDailyAdLimit() {
+                const todayStr = getTodayDateString();
+                if (userData.lastAdWatchDate !== todayStr) { userData.dailyAdsWatched = 0; userRef.update({ dailyAdsWatched: 0, lastAdWatchDate: todayStr }); }
+                if (userData.dailyAdsWatched >= appSettings.dailyAdLimit) {
+                    if (appSettings.adsEnabled && window.adFunctionReady && !userData.adsDisabled) {
+                        document.getElementById('watch-ad-btn').disabled = true;
+                        document.getElementById('auto-ad-btn').disabled = true;
+                        document.getElementById('watch-ad-btn').innerText = "Daily Limit Reached";
+                    }
+                    stopAutoAds();
+                    return false;
+                }
+                return true;
+            }
+
+            async function initializeAds(primaryZoneId, backupZoneId) {
+                window.adsInitialized = true; window.adFunctionReady = false;
+                if (primaryZoneId) {
+                    window.adLoadingStatus = "Loading Ads..."; updateDynamicUI();
+                    try { const loadedZoneId = await tryLoadAdNetwork(primaryZoneId); window.activeAdZoneId = loadedZoneId; window.adFunctionReady = true; console.log(`Primary ad network (${loadedZoneId}) loaded.`); updateUI(); return;
+                    } catch (error) { console.error(`Primary ad network failed:`, error); }
+                }
+                if (backupZoneId) {
+                    window.adLoadingStatus = "Trying backup..."; updateDynamicUI();
+                    try { const loadedZoneId = await tryLoadAdNetwork(backupZoneId); window.activeAdZoneId = loadedZoneId; window.adFunctionReady = true; console.log(`Backup ad network (${loadedZoneId}) loaded.`); updateUI(); return;
+                    } catch (error) { console.error(`Backup ad network failed:`, error); }
+                }
+                window.adLoadingStatus = "Ads Unavailable"; updateDynamicUI(); console.log("All ad networks failed to load.");
+            }
+
+            function tryLoadAdNetwork(zoneId) {
+                return new Promise((resolve, reject) => {
+                    const adFunctionName = 'show_' + zoneId;
+                    if (typeof window[adFunctionName] === 'function') { resolve(zoneId); return; }
+                    const script = document.createElement('script');
+                    script.src = '//libtl.com/sdk.js';
+                    script.setAttribute('data-zone', zoneId);
+                    script.setAttribute('data-sdk', adFunctionName);
+                    document.body.appendChild(script);
+                    script.onerror = () => reject("Script download failed.");
+                    script.onload = () => {
+                        let attempts = 0;
+                        const interval = setInterval(() => {
+                            if (typeof window[adFunctionName] === 'function') { clearInterval(interval); resolve(zoneId); } 
+                            else if (++attempts >= 6) { clearInterval(interval); reject("Ad function verification timed out."); }
+                        }, 500);
+                    };
+                });
+            }
+
+            function updateUI() {
+                document.getElementById('watched-ads').textContent = watchedAdsCount;
+                document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+                document.getElementById('daily-ads-watched').textContent = userData.dailyAdsWatched || 0;
+                const announcementBox = document.getElementById('announcement-box');
+                announcementBox.style.display = appSettings.announcement ? 'block' : 'none';
+                announcementBox.textContent = appSettings.announcement;
+                document.getElementById('daily-limit').textContent = appSettings.dailyAdLimit;
+
+                const dailyBtn = document.getElementById('daily-bonus-btn');
+                if (userData.lastCheckinDate === getTodayDateString()) {
+                    dailyBtn.disabled = true; dailyBtn.innerText = "Claimed Today";
+                } else {
+                    dailyBtn.disabled = false; dailyBtn.innerText = "Daily Bonus";
+                }
+
+                // নতুন যুক্ত করা কোড: ব্যবহারকারীর লেভেল প্রদর্শন
+                const userLevel = getUserLevel();
+                document.getElementById('user-level-badge').textContent = userLevel.name;
+
+                updateProgressCircle(); updateDynamicUI(); checkDailyAdLimit();
+            }
+
+            window.watchAd = function() {
+                if (!checkDailyAdLimit() || !window.adFunctionReady) return;
+                const adFunctionName = 'show_' + window.activeAdZoneId;
+                if (typeof window[adFunctionName] === 'function') {
+                    window[adFunctionName]().then(() => {
+                        const todayStr = getTodayDateString();
+                        let dailyCount = (userData.lastAdWatchDate !== todayStr) ? 0 : (userData.dailyAdsWatched || 0);
+                        
+                        // নতুন যুক্ত করা কোড: বোনাস ও লেভেল অনুযায়ী পয়েন্ট ক্যালকুলেশন
+                        let basePoints = appSettings.pointsPerAd;
+                        let pointsGained = basePoints;
+                        let transactionDetails = `Watched Ad #${watchedAdsCount + 1}`;
+
+                        const userLevel = getUserLevel();
+                        if (userLevel.multiplier > 1) {
+                            pointsGained *= userLevel.multiplier;
+                            transactionDetails += ` (Level: ${userLevel.name} x${userLevel.multiplier})`;
+                        }
+
+                        if (appSettings.bonusEvent && appSettings.bonusEvent.expiresAt > Date.now()) {
+                            pointsGained *= appSettings.bonusEvent.multiplier;
+                            transactionDetails += ` (Event Bonus x${appSettings.bonusEvent.multiplier})`;
+                        }
+                        
+                        userRef.update({ 
+                            watchedAds: watchedAdsCount + 1, 
+                            earnedPoints: earnedPoints + pointsGained, 
+                            dailyAdsWatched: dailyCount + 1, 
+                            lastAdWatchDate: todayStr 
+                        }).then(() => {
+                            logTransaction('ad_watch', pointsGained, transactionDetails);
+                        });
+                    }).catch(err => { console.error("Ad error:", err); alert("Ad failed to display."); });
+                } else { alert("Ads are not ready. Please wait."); }
+            }
+            
+            window.claimDailyBonus = function() {
+                const todayStr = getTodayDateString();
+                if (userData.lastCheckinDate === todayStr) {
+                    alert("You have already claimed your daily bonus today."); return;
+                }
+                const bonusAmount = appSettings.dailyCheckinBonus || 1;
+                userRef.update({
+                    earnedPoints: earnedPoints + bonusAmount,
+                    lastCheckinDate: todayStr
+                }).then(() => {
+                    logTransaction('daily_bonus', bonusAmount, "Daily Check-in Bonus");
+                    alert(`You have received ${bonusAmount} points as a daily bonus!`);
+                });
+            }
+
+            function updateProgressCircle() { document.getElementById('ads-progress').textContent = `${(watchedAdsCount % 10) * 10}%`; }
+            window.startAutoAds = function() { if (!checkDailyAdLimit() || !window.adFunctionReady) return; autoAdInterval = setInterval(watchAd, appSettings.autoAdIntervalSeconds * 1000); document.getElementById('auto-ad-btn').disabled = true; document.getElementById('stop-auto-btn').disabled = false; }
+            window.stopAutoAds = function() { clearInterval(autoAdInterval); if (window.adFunctionReady && appSettings.adsEnabled && !userData.adsDisabled) document.getElementById('auto-ad-btn').disabled = false; document.getElementById('stop-auto-btn').disabled = true; }
+            
+            window.showWithdrawForm = function() {
+                 const paymentMethods = appSettings.paymentMethodsCSV ? appSettings.paymentMethodsCSV.split(',') : ['bkash'];
+                 const selectEl = document.getElementById('payment-method');
+                 selectEl.innerHTML = '';
+                 paymentMethods.forEach(method => {
+                    const option = document.createElement('option');
+                    option.value = method.trim();
+                    option.textContent = method.trim().charAt(0).toUpperCase() + method.trim().slice(1);
+                    selectEl.appendChild(option);
+                 });
+                 document.getElementById('withdraw-section').style.display = 'block';
+            }
+            
+            window.withdrawPoints = function() {
+                const amount = parseFloat(document.getElementById('withdraw-amount').value);
+                const statusEl = document.getElementById('withdraw-status');
+                if (!amount||amount<=0||amount>earnedPoints||amount<appSettings.minWithdrawPoints){ statusEl.textContent = !amount||amount<=0?"Invalid amount.":amount>earnedPoints?"Insufficient balance.":`Minimum is ${appSettings.minWithdrawPoints} points.`; return; }
+                
+                // নতুন যুক্ত করা কোড: উইথড্রয়াল ফি ক্যালকুলেশন
+                const feePercentage = appSettings.withdrawalFeePercentage || 0;
+                const fee = (amount * feePercentage) / 100;
+                const finalAmount = amount - fee;
+
+                const requestData = {
+                    userId, userName:userData.userName, amount: amount, fee: fee, finalAmount: finalAmount,
+                    method:document.getElementById('payment-method').value,
+                    phone:document.getElementById('withdraw-phone').value, status:'Pending',
+                    timestamp:new Date().toISOString()
+                };
+                database.ref('withdrawals').push().set(requestData).then(()=>{
+                    userRef.update({earnedPoints:earnedPoints-amount});
+                    logTransaction('withdraw_request', -amount, `Request for ${amount} points. Fee: ${fee.toFixed(2)}.`);
+                    statusEl.textContent='Request sent!';
+                    document.getElementById('withdraw-amount').value=document.getElementById('withdraw-phone').value='';
+                    setTimeout(()=>{document.getElementById('withdraw-section').style.display='none';statusEl.textContent='';},3000);
+                }).catch(err=>{statusEl.textContent='Error.';});
+            }
+
+            const modal = document.getElementById('appModal');
+            const modalBody = document.getElementById('modal-body');
+            window.closeModal = function() { modal.style.display = 'none'; }
+            window.showProfileModal = function() {
+                const regDate=userData.createdAt?new Date(userData.createdAt).toLocaleDateString('en-GB'):'N/A';
+                const userLevel = getUserLevel();
+                let content=`<h2>My Profile</h2>
+                <p><strong>Username:</strong> ${userData.userName} <button onclick="editUsername()" style="font-size:12px;padding:3px 6px;">Edit</button></p>
+                <p><strong>Your Referral Code:</strong> <span style="color:yellow; font-weight:bold;">${userData.userName}</span></p>
+                <p><strong>Current Level:</strong> ${userLevel.name} (Ad points x${userLevel.multiplier})</p>
+                <p><strong>Points:</strong> ${earnedPoints.toFixed(2)}</p>
+                <p><strong>Total Ads Watched:</strong> ${watchedAdsCount}</p>
+                <p><strong>Registered On:</strong> ${regDate}</p>
+                <p><strong>Total Referrals:</strong> ${userData.referralsMade || 0}</p>
+                <button onclick="showTransactionHistory()" style="width:100%; margin-top:10px;">View Full History</button>
+                <h3>Recent Withdrawals</h3>`;
+                database.ref('withdrawals').orderByChild('userId').equalTo(userId).limitToLast(5).once('value',s=>{const h=s.val();if(!h)content+="<p>No withdrawal history found.</p>";else{content+='<table><thead><tr><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';Object.values(h).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).forEach(r=>{content+=`<tr><td>${new Date(r.timestamp).toLocaleDateString()}</td><td>${r.amount}</td><td>${r.status}</td></tr>`;});content+='</tbody></table>';}modalBody.innerHTML=content;modal.style.display='block';});
+            }
+            window.editUsername = function() {
+                const newUsername = prompt("Enter your new username (without @):", userData.userName.substring(1));
+                if (newUsername && newUsername.trim()) {
+                    const finalUsername = "@" + newUsername.trim();
+                    database.ref('users').orderByChild('userName').equalTo(finalUsername).once('value', snapshot => {
+                        if (snapshot.exists()) {
+                            alert("This username is already taken.");
+                        } else {
+                            userRef.update({ userName: finalUsername }).then(() => alert("Username updated successfully!"));
+                        }
+                    });
+                }
+            }
+            window.showTransactionHistory = function() {
+                closeModal();
+                modalBody.innerHTML = '<h2>Transaction History</h2><p>Loading...</p>';
+                modal.style.display = 'block';
+                database.ref('transactions/' + userId).orderByChild('timestamp').limitToLast(50).once('value', s => {
+                    const history = s.val();
+                    let content = '<h2>Transaction History</h2>';
+                    if (!history) {
+                        content += "<p>No transactions found.</p>";
+                    } else {
+                        content += '<table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Details</th></tr></thead><tbody>';
+                        Object.values(history).reverse().forEach(t => {
+                            content += `<tr>
+                                <td>${new Date(t.timestamp).toLocaleDateString()}</td>
+                                <td style="text-transform: capitalize;">${t.type.replace('_', ' ')}</td>
+                                <td style="color:${t.amount > 0 ? 'lightgreen' : 'salmon'};">${t.amount > 0 ? '+' : ''}${t.amount.toFixed(2)}</td>
+                                <td>${t.details}</td>
+                            </tr>`;
+                        });
+                        content += '</tbody></table>';
+                    }
+                    modalBody.innerHTML = content;
+                });
+            }
+
+            window.showLeaderboard = function() {
+                modalBody.innerHTML='<h2>Top Earners</h2><p>Loading...</p>';modal.style.display='block';database.ref('users').orderByChild('earnedPoints').limitToLast(20).once('value',s=>{const u=s.val();if(!u){modalBody.innerHTML+="<p>No users found.</p>";return;}const su=Object.values(u).sort((a,b)=>(b.earnedPoints||0)-(a.earnedPoints||0));let c='<table><thead><tr><th>Rank</th><th>Username</th><th>Points</th></tr></thead><tbody>';su.forEach((ur,i)=>{if(!ur.isBanned)c+=`<tr><td>${i+1}</td><td>${ur.userName}</td><td>${(ur.earnedPoints||0).toFixed(2)}</td></tr>`;});c+='</tbody></table>';modalBody.innerHTML=c;});
+            }
+            window.showTasksModal = function() {
+                modalBody.innerHTML = '<h2>Available Tasks</h2><p>Loading tasks...</p>';
+                modal.style.display = 'block';
+                database.ref('tasks').orderByChild('isActive').equalTo(true).once('value', snapshot => {
+                    const tasks = snapshot.val();
+                    if (!tasks) {
+                        modalBody.innerHTML = '<h2>Available Tasks</h2><p>No tasks available right now. Please check back later.</p>';
+                        return;
+                    }
+                    let content = '<h2>Available Tasks</h2>';
+                    Object.values(tasks).forEach(task => {
+                        content += `<div class="task-item">
+                            <h4>${task.title} (+${task.points} Points)</h4>
+                            <p>${task.description}</p>
+                            <button onclick="window.open('${task.url}', '_blank')">Complete Task</button>
+                        </div>`;
+                    });
+                    content += "<p style='font-size:12px; color: #ccc; margin-top: 15px;'>Note: Task points are added by the admin after verification.</p>";
+                    modalBody.innerHTML = content;
+                });
+            }
+
+            window.showSupportModal = function() { modalBody.innerHTML=`<h2>Contact Support</h2><p>Describe your issue below.</p><textarea id="support-message" rows="5" placeholder="Type your message here..." style="width:100%;"></textarea><button onclick="submitSupportTicket()" style="width:100%;padding:10px;margin-top:10px;">Send Message</button>`;modal.style.display='block'; }
+            window.submitSupportTicket = function() { const msg=document.getElementById('support-message').value.trim();if(msg)database.ref('supportTickets').push().set({userId,userName:userData.userName,message:msg,timestamp:new Date().toISOString(),status:'Open'}).then(()=>{alert('Message sent!');closeModal();});else alert('Please type a message.'); }
+        } 
+    </script>
+</body>
+</html>
