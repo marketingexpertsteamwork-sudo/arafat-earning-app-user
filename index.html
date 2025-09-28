@@ -2,693 +2,732 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The_Arafat_Earnings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Monkey Ads Earning V1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --primary-color: green; /* নতুন: এই রঙটি এখন অ্যাডমিন প্যানেল থেকে পরিবর্তনযোগ্য */
+            --primary-color: #4A90E2; --primary-dark: #357ABD; --secondary-color: #50E3C2;
+            --accent-color: #F5A623; --bg-light: #F7F7F7; --bg-dark: #2C3E50;
+            --card-bg-light: #FFFFFF; --card-bg-dark: #34495E; --text-dark: #333333;
+            --text-light: #F7F7F7; --border-color-light: #E0E0E0; --border-color-dark: #4A657D;
+            --border-radius: 12px; --border-radius-sm: 8px; --transition: all 0.3s ease-in-out;
         }
-        body { margin: 0; padding: 20px; background-color: #121212; color: #fff; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
-        .container { text-align: center; background: #1f1f1f; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); width: 100%; max-width: 350px; box-sizing: border-box; }
-        .announcement-box { background-color: #ffc107; color: #333; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center; display: none; }
-        /* নতুন যুক্ত করা কোড: বোনাস ইভেন্ট নোটিশের স্টাইল */
-        .bonus-event-notice { background-color: #dc3545; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-align: center; display: none; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
-        .container h1 { font-size: 22px; color: var(--primary-color); margin-bottom: 10px; }
-        .developer { font-size: 12px; background-color: var(--primary-color); padding: 5px 10px; border-radius: 5px; margin-bottom: 15px; display: inline-block; cursor: pointer; }
-        .stats p { margin: 8px 0; font-size: 16px; }
-        .progress-circle { width: 90px; height: 90px; border: 5px solid var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 15px auto; font-size: 20px; font-weight: bold; }
-        .buttons button, .auth-container button { width: 100%; margin: 6px 0; padding: 12px; font-size: 16px; border: none; border-radius: 8px; color: white; background: var(--primary-color); cursor: pointer; transition: background-color 0.3s; }
-        .buttons button:hover, .auth-container button:hover { background: darkorange; }
-        .buttons button:disabled { background-color: #555; cursor: not-allowed; }
-        .secondary-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .secondary-buttons button { background-color: #007bff; flex-grow: 1; }
-        .secondary-buttons button:hover { background-color: #0056b3; }
-        .withdraw-section { margin-top: 20px; display: none; padding: 20px; background-color: #2a2a2a; border-radius: 10px; }
-        .withdraw-section input, .withdraw-section select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 2px solid #555; background-color: #333; color: #fff; box-sizing: border-box; }
-        #withdraw-status { color: orange; font-size: 14px; margin-top: 10px; min-height: 20px; }
-        .user-info p { font-size: 16px; margin: 5px 0; font-weight: bold; }
-        /* নতুন: User Level Badge স্টাইল */
-        .user-info .user-level-badge { padding: 3px 10px; background-color: #ffc107; color: #1f1f1f; border-radius: 12px; font-size: 12px; margin-left: 8px; vertical-align: middle; }
-        .update-notice { background-color: #dc3545; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 16px; text-align: center; display: none; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
-        .modal-content { background-color: #2a2a2a; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 8px; color: #fff; }
-        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .modal-content table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .modal-content th, .modal-content td { border: 1px solid #555; padding: 8px; text-align: left;}
-        .modal-content th { background-color: var(--primary-color); }
-        .task-item { border: 1px solid #444; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-        .task-item h4 { margin: 0 0 5px 0; color: #ffc107; }
-        .task-item p { margin: 0 0 10px 0; font-size: 14px; }
-        .task-item button { width: auto; padding: 8px 12px; font-size: 14px; }
-        #logout-btn { background-color: #dc3545; margin-top: 10px; }
-
-        /* নতুন যুক্ত করা কোড: উন্নত লগইন/রেজিস্ট্রেশন ফর্মের স্টাইল */
-        #auth-container { padding: 10px 25px 25px 25px; }
-        #auth-container h1 { font-size: 24px; color: var(--primary-color); margin-bottom: 8px; }
-        #auth-container p { font-size: 14px; color: #ccc; margin-bottom: 20px; }
-        #auth-container input {
-            width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px;
-            border: 1px solid #444; background-color: #2a2a2a; color: #fff;
-            box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s;
+        body.dark-mode {
+            background-color: var(--bg-dark); color: var(--text-light); --header-bg: linear-gradient(135deg, var(--bg-dark), #1A2530);
+            --card-bg: var(--card-bg-dark); --text-primary: var(--text-light); --text-secondary: #B0B0B0;
+            --border-color: var(--border-color-dark); --input-bg: #4A657D; --input-border: #5A7E9C;
+            --button-bg-secondary: #4A657D; --button-text-secondary: var(--secondary-color); --toggle-bg: #4A657D;
         }
-        #auth-container input:focus {
-            border-color: var(--primary-color); box-shadow: 0 0 5px var(--primary-color); outline: none;
+        body:not(.dark-mode) {
+            background-color: var(--bg-light); color: var(--text-dark); --header-bg: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            --card-bg: var(--card-bg-light); --text-primary: var(--text-dark); --text-secondary: #666666;
+            --border-color: var(--border-color-light); --input-bg: #F0F0F0; --input-border: #E0E0E0;
+            --button-bg-secondary: #E9ECEF; --button-text-secondary: var(--primary-color); --toggle-bg: #E0E0E0;
         }
-        .link-btn {
-            background: none !important; border: none; color: #00aaff; cursor: pointer;
-            padding: 10px 0; width: 100%; text-align: center; font-size: 14px;
-        }
-        .link-btn:hover { text-decoration: underline; }
-        .link-btn.small { font-size: 12px; color: #aaa; }
-        .auth-error { color: orange; font-size: 14px; min-height: 20px; text-align: center; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; position: relative; transition: background-color var(--transition), color var(--transition); }
+        .app-container { max-width: 480px; margin: 0 auto; position: relative; background-color: var(--bg-light); }
+        .header { height: 180px; background: var(--header-bg); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--text-light); border-bottom-left-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+        .header-title { font-size: 1.6rem; font-weight: 700; z-index: 2; letter-spacing: 0.5px; }
+        .theme-toggle { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: var(--toggle-bg); display: flex; align-items: center; justify-content: center; color: var(--text-primary); font-size: 1rem; cursor: pointer; z-index: 10; transition: var(--transition); border: 1px solid var(--border-color); }
+        .theme-toggle:hover { opacity: 0.8; transform: scale(1.05); }
+        .profile-section { margin-top: -50px; padding: 0 20px; position: relative; z-index: 2; }
+        .profile-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 70px 20px 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); border: 1px solid var(--border-color); position: relative; text-align: center; transition: var(--transition); }
+        .profile-pic { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--card-bg); object-fit: cover; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); background: var(--primary-color); }
+        .profile-name { font-size: 1.3rem; font-weight: 600; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; color: var(--text-primary); }
+        .verified-badge { color: var(--secondary-color); margin-left: 5px; font-size: 0.8rem; }
+        .edit-name-btn { background: none; border: none; color: var(--primary-color); margin-left: 8px; cursor: pointer; font-size: 0.8rem; transition: var(--transition); opacity: 0.8; }
+        .edit-name-btn:hover { opacity: 1; transform: scale(1.1); }
+        .points-display { display: inline-flex; align-items: center; background: rgba(74, 144, 226, 0.1); padding: 6px 15px; border-radius: 50px; margin-top: 8px; font-weight: 600; color: var(--primary-color); font-size: 0.9rem; }
+        .points-display i { margin-right: 6px; color: var(--primary-color); }
+        .stats-display { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
+        .stat-item { background: var(--bg-light); padding: 8px 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); min-width: 70px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
+        body.dark-mode .stat-item { background: var(--input-bg); }
+        .stat-value { font-weight: 600; color: var(--text-primary); margin-bottom: 2px; font-size: 1rem; }
+        .stat-label { font-size: 0.7rem; opacity: 0.8; color: var(--text-secondary); }
+        .level-section { margin-top: 15px; }
+        .level-info { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 500; margin-bottom: 5px; }
+        .level-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 5px; }
+        .xp-bar-container { height: 6px; background-color: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .xp-bar { height: 100%; background-color: var(--accent-color); width: 0%; transition: width 0.5s ease; }
+        .content-section { padding: 20px; margin-bottom: 80px; }
+        .section-title { display: flex; align-items: center; margin-bottom: 18px; font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .section-title i { margin-right: 10px; color: var(--primary-color); font-size: 1.1rem; }
+        .task-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border: 1px solid var(--border-color); transition: var(--transition); }
+        .task-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); }
+        .task-header { display: flex; align-items: center; margin-bottom: 15px; }
+        .task-icon { width: 38px; height: 38px; border-radius: 50%; background: rgba(74, 144, 226, 0.1); display: flex; align-items: center; justify-content: center; margin-right: 10px; color: var(--primary-color); font-size: 1rem; }
+        .task-title { font-weight: 600; flex: 1; color: var(--text-primary); }
+        .reward-badge { background: rgba(245, 166, 35, 0.1); color: var(--accent-color); padding: 4px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+        .task-description { color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; font-size: 0.9rem; }
+        .progress-container { margin-bottom: 18px; }
+        .progress-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.75rem; color: var(--text-secondary); }
+        .progress-bar { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .progress { height: 100%; background: var(--primary-color); border-radius: 3px; transition: width 0.5s ease; }
+        .btn { display: block; width: 100%; padding: 12px; border-radius: var(--border-radius-sm); border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: var(--transition); text-align: center; text-decoration: none; font-family: 'Inter', sans-serif; }
+        .btn-primary { background: var(--primary-color); color: white; box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(74, 144, 226, 0.3); }
+        .btn-secondary { background: var(--button-bg-secondary); color: var(--button-text-secondary); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); transform: translateY(-2px); }
+        body.dark-mode .btn-secondary:hover { background: var(--primary-color); color: white; }
+        .btn-disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; opacity: 0.7; }
+        .btn-disabled:hover { transform: none; box-shadow: none; }
+        .channel-list { list-style: none; }
+        .channel-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .channel-item:last-child { border-bottom: none; }
+        .channel-info { display: flex; align-items: center; flex: 1; }
+        .channel-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(74, 144, 226, 0.1); display: flex; align-items: center; justify-content: center; margin-right: 10px; color: var(--primary-color); font-size: 0.9rem; }
+        .channel-name { font-weight: 500; flex: 1; color: var(--text-primary); }
+        .channel-reward { font-size: 0.8rem; color: var(--accent-color); margin-right: 12px; }
+        .join-btn { padding: 7px 14px; border-radius: var(--border-radius-sm); background: var(--primary-color); color: white; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: var(--transition); border: none; cursor: pointer; }
+        .join-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .join-btn.claimed { background: var(--secondary-color); cursor: default; opacity: 0.9; }
+        .input-group { margin-bottom: 15px; }
+        .input-label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--text-secondary); font-size: 0.85rem; }
+        .input-field { width: 100%; padding: 10px 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-primary); font-size: 0.95rem; transition: var(--transition); }
+        .input-field:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2); }
+        .select-field { width: 100%; padding: 10px 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-primary); font-size: 0.95rem; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 10px center; background-size: 15px; }
+        body.dark-mode .select-field { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        .status-message { text-align: center; margin-top: 15px; font-size: 0.85rem; min-height: 20px; padding: 8px; border-radius: var(--border-radius-sm); }
+        .success-message { background: rgba(80, 227, 194, 0.1); color: #50E3C2; border: 1px solid #50E3C2; }
+        .error-message { background: rgba(230, 74, 74, 0.1); color: #E64A4A; border: 1px solid #E64A4A; }
+        .referral-container { background: var(--input-bg); border-radius: var(--border-radius-sm); padding: 15px; margin-bottom: 20px; border: 1px dashed var(--border-color); }
+        .referral-input-group { display: flex; margin-bottom: 10px; }
+        .referral-input { flex: 1; padding: 9px 12px; border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm); border: 1px solid var(--input-border); background: var(--bg-light); color: var(--text-primary); font-size: 0.9rem; }
+        body.dark-mode .referral-input { background: var(--card-bg-dark); }
+        .copy-btn { padding: 0 14px; background: var(--primary-color); color: white; border: none; border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 0.9rem; }
+        .copy-btn:hover { background: var(--primary-dark); }
+        .referral-stats { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .stat-card { text-align: center; flex: 1; }
+        .stat-number { font-size: 1.3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 3px; }
+        .stat-title { font-size: 0.75rem; color: var(--text-secondary); }
+        .referred-users { margin-top: 15px; }
+        .user-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(74, 144, 226, 0.1); display: flex; align-items: center; justify-content: center; margin-right: 10px; color: var(--primary-color); font-size: 0.9rem; }
+        .user-info { flex: 1; }
+        .user-name { font-weight: 500; color: var(--text-primary); }
+        .user-code { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+        .empty-state { text-align: center; padding: 25px 0; color: var(--text-secondary); }
+        .empty-state i { font-size: 1.8rem; margin-bottom: 8px; color: var(--primary-color); opacity: 0.7; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.08); z-index: 100; max-width: 480px; margin: 0 auto; border-top: 1px solid var(--border-color); border-top-left-radius: var(--border-radius); border-top-right-radius: var(--border-radius); }
+        body.dark-mode .bottom-nav { box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.3); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none; font-size: 0.7rem; font-weight: 500; flex: 1; transition: var(--transition); }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 3px; transition: var(--transition); }
+        .nav-item.active { color: var(--primary-color); transform: translateY(-3px); }
+        .nav-item.active i { color: var(--primary-color); transform: scale(1.08); }
+        .ad-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .ad-modal-overlay.show { opacity: 1; pointer-events: all; }
+        .ad-modal { background: var(--card-bg); border-radius: var(--border-radius); width: 90%; max-width: 380px; padding: 25px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); position: relative; }
+        .ad-modal-overlay.show .ad-modal { transform: scale(1); }
+        .ad-modal-title { font-size: 1.2rem; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; }
+        .spinner { width: 45px; height: 45px; border: 3px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; margin: 15px auto; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .ad-status { margin: 12px 0; color: var(--text-secondary); font-size: 0.9rem; }
+        .developer-footer { text-align: center; padding: 12px; font-size: 0.75rem; color: var(--text-secondary); margin-top: 20px; }
+        .developer-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); color: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); z-index: 1000; opacity: 0; transition: all 0.3s ease; font-size: 0.85rem; }
+        .toast.show { opacity: 1; bottom: 90px; }
+        @media (max-width: 480px) { .profile-card { padding: 70px 15px 15px; } .content-section { padding: 15px; } .task-card { padding: 15px; } .header-title { font-size: 1.5rem; } }
+        .blocked-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-light); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        body.dark-mode .blocked-overlay { background: var(--bg-dark); }
+        .blocked-icon { font-size: 3rem; color: #E64A4A; margin-bottom: 15px; }
+        .blocked-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .blocked-message { color: var(--text-secondary); }
+        .notice-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .notice-modal-overlay.show { opacity: 1; pointer-events: all; }
+        .notice-modal { background: var(--card-bg); border-radius: var(--border-radius); width: 90%; max-width: 400px; padding: 25px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; }
+        .notice-modal-overlay.show .notice-modal { transform: scale(1); }
+        .notice-modal-title { font-size: 1.3rem; font-weight: 600; color: var(--primary-color); margin-bottom: 15px; }
+        .notice-modal-body { color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
+        .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-light); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        body.dark-mode .fullscreen-overlay { background: var(--bg-dark); }
+        .fullscreen-icon { font-size: 3rem; margin-bottom: 15px; }
+        .fullscreen-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .fullscreen-message { color: var(--text-secondary); }
     </style>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- নতুন এবং উন্নত লগইন/রেজিস্ট্রেশন ফরম -->
-    <div class="container" id="auth-container">
-        <!-- লগইন ফর্ম -->
-        <div id="login-form">
-            <h1>Welcome Back!</h1>
-            <p>Login to continue your journey.</p>
-            <input type="email" id="login-email" placeholder="Enter your email" required>
-            <input type="password" id="login-password" placeholder="Enter your password" required>
-            <p class="auth-error" id="login-error"></p>
-            <button onclick="loginUser()">Login</button>
-            <button class="link-btn" onclick="toggleAuthForms()">Don't have an account? Register</button>
-            <button class="link-btn small" onclick="resetPassword()">Forgot Password?</button>
+    <div class="app-container" id="appContainer">
+        <div class="header">
+            <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+            <h1 class="header-title" id="appHeaderTitle">Monkey Ads Earning V1</h1>
         </div>
+        <div class="profile-section">
+            <div class="profile-card">
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" class="profile-pic" id="profilePic">
+                <h1 class="profile-name" id="profileNameDisplay">Loading...<i class="fas fa-check-circle verified-badge"></i><button class="edit-name-btn" id="editNameBtn"><i class="fas fa-pencil-alt"></i></button></h1>
+                <div class="points-display" id="userPointsDisplay"><i class="fas fa-coins"></i> 0 Points</div>
+                
+                <div class="level-section" id="levelSection">
+                    <div class="level-info">
+                        <span id="levelBadge" class="level-badge">Level 1</span>
+                        <span id="xpText">0/100 XP</span>
+                    </div>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar" id="xpBar"></div>
+                    </div>
+                </div>
 
-        <!-- রেজিস্ট্রেশন ফর্ম -->
-        <div id="register-form" style="display: none;">
-            <h1>Create Account</h1>
-            <p>Join and start earning today!</p>
-            <input type="email" id="register-email" placeholder="Enter your email" required>
-            <input type="text" id="register-username" placeholder="Choose a username" required>
-            <input type="password" id="register-password" placeholder="Create a password" required>
-            <input type="password" id="register-password-confirm" placeholder="Confirm your password" required>
-            <input type="text" id="register-referral" placeholder="Referral Code (Optional)">
-            <p class="auth-error" id="register-error"></p>
-            <button onclick="registerUser()">Register</button>
-            <button class="link-btn" onclick="toggleAuthForms()">Already have an account? Login</button>
+                <div class="stats-display">
+                    <div class="stat-item"><div class="stat-value" id="adsWatchedToday">0</div><div class="stat-label">Today</div></div>
+                    <div class="stat-item"><div class="stat-value" id="adsLeftToday">...</div><div class="stat-label">Left</div></div>
+                    <div class="stat-item"><div class="stat-value" id="totalAdsWatched">0</div><div class="stat-label">Total</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="content-section" id="mainContent"></div>
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active" data-page="home"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="#" class="nav-item" data-page="tasks"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+            <a href="#" class="nav-item" data-page="bonus"><i class="fas fa-gift"></i><span>Bonus</span></a>
+            <a href="#" class="nav-item" data-page="withdraw"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
+            <a href="#" class="nav-item" data-page="referral"><i class="fas fa-share-alt"></i><span>Referral</span></a>
+        </div>
+        <div class="ad-modal-overlay" id="adModal">
+            <div class="ad-modal">
+                <h3 class="ad-modal-title" id="adModalTitle">Loading Ad...</h3>
+                <div class="spinner" id="adSpinner"></div>
+                <p class="ad-status" id="adStatusMessage">Please wait while we load the ad</p>
+                <button class="btn btn-primary" id="adCloseBtn" style="display: none;">Close & Claim Reward</button>
+            </div>
+        </div>
+        <div class="toast" id="toast"></div>
+        <div class="blocked-overlay" id="blockedOverlay">
+            <div class="blocked-icon"><i class="fas fa-user-lock"></i></div>
+            <h2 class="blocked-title">Account Blocked</h2>
+            <p class="blocked-message">Your account has been suspended. Please contact support for more information.</p>
+        </div>
+        <div class="notice-modal-overlay" id="noticeModalOverlay">
+            <div class="notice-modal">
+                <h3 class="notice-modal-title"><i class="fas fa-bell"></i> Important Notice</h3>
+                <div class="notice-modal-body" id="noticeModalBody"></div>
+                <button class="btn btn-primary" id="noticeCloseBtn">I Understand</button>
+            </div>
+        </div>
+        <div class="notice-modal-overlay" id="personalNoticeModalOverlay">
+            <div class="notice-modal">
+                <h3 class="notice-modal-title"><i class="fas fa-envelope"></i> A Message For You</h3>
+                <div class="notice-modal-body" id="personalNoticeModalBody"></div>
+                <button class="btn btn-primary" id="personalNoticeCloseBtn">Got It!</button>
+            </div>
         </div>
     </div>
-
-    <!-- মূল অ্যাপ যা লগইন করার পর দেখা যাবে -->
-    <div class="container" id="app-container" style="display:none;">
-        <div class="announcement-box" id="announcement-box"></div>
-        <!-- নতুন যুক্ত করা কোড: বোনাস ইভেন্ট নোটিশ দেখানোর স্থান -->
-        <div class="bonus-event-notice" id="bonus-event-notice"></div>
-        <div class="update-notice" id="update-notice">Please update your app to the latest version to continue.</div>
-        <h1 id="app-title">The_Anisur_Earnings</h1>
-        <div class="developer" id="dev-info" onclick="window.location.href='https://t.me/juelranacpa1'">Developer by JR Zone 2025</div>
-        <div class="user-info">
-            <p>Welcome, <span id="user-name">...</span><span id="user-level-badge" class="user-level-badge"></span></p>
-        </div>
-        <div class="stats">
-            <p>Watched Ads: <span id="watched-ads">0</span></p>
-            <p>Earned Points: <span id="earned-points">0.00</span></p>
-            <p>Today's Ads: <span id="daily-ads-watched">0</span> / <span id="daily-limit">...</span></p>
-        </div>
-        <div class="progress-circle"><span id="ads-progress">0%</span></div>
-        <div class="buttons">
-            <button id="watch-ad-btn" onclick="watchAd()">Watch Ad</button>
-            <button id="auto-ad-btn" onclick="startAutoAds()">Auto Show Ads</button>
-            <button id="stop-auto-btn" onclick="stopAutoAds()" disabled>Stop Auto Ads</button>
-            <button id="withdraw-btn" onclick="showWithdrawForm()">Withdraw</button>
-        </div>
-        <div class="secondary-buttons">
-            <button id="daily-bonus-btn" onclick="claimDailyBonus()">Daily Bonus</button>
-            <button onclick="showTasksModal()">Tasks</button>
-            <button onclick="showProfileModal()">My Profile</button>
-            <button onclick="showLeaderboard()">Leaderboard</button>
-            <button onclick="showSupportModal()">Support</button>
-        </div>
-        <div class="withdraw-section" id="withdraw-section">
-            <h3 style="color: orange; margin-bottom: 15px;">Withdrawal Request</h3>
-            <!-- নতুন যুক্ত করা কোড: উইথড্রয়াল ফি দেখানোর স্থান -->
-            <p id="withdraw-fee-info" style="font-size: 13px; color: #ffc107; margin-bottom: 10px;"></p>
-            <input type="number" id="withdraw-amount" placeholder="Enter Points to Withdraw" />
-            <select id="payment-method"></select>
-            <input type="text" id="withdraw-phone" placeholder="Enter Phone Number" />
-            <button onclick="withdrawPoints()">Submit Request</button>
-            <p id="withdraw-status"></p>
-        </div>
-        <button id="logout-btn" onclick="logoutUser()">Logout</button>
+    
+    <div class="fullscreen-overlay" id="maintenanceOverlay">
+        <div class="fullscreen-icon" style="color: #F5A623;"><i class="fas fa-tools"></i></div>
+        <h2 class="fullscreen-title">Under Maintenance</h2>
+        <p class="fullscreen-message" id="maintenanceMessageBody">The app is currently under maintenance. We will be back soon!</p>
     </div>
 
-    <div id="appModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="modal-body"></div>
-        </div>
+    <div class="fullscreen-overlay" id="versionMismatchOverlay">
+        <div class="fullscreen-icon" style="color: #4A90E2;"><i class="fas fa-cloud-download-alt"></i></div>
+        <h2 class="fullscreen-title">New Update Available</h2>
+        <p class="fullscreen-message">A new version of the app is available. Please clear your browser cache or restart the app to get the latest features.</p>
     </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 
     <script>
-        const bootstrapConfig = { databaseURL: "https://the-arafat-earnings-default-rtdb.firebaseio.com" };
-        const bootstrapApp = firebase.initializeApp(bootstrapConfig, 'bootstrap-app');
-        const db = bootstrapApp.database();
-        let firebaseConfig;
+        const firebaseConfig = {
+        apiKey: "AIzaSyDfn1veuHMeHCbqgYQs_KEREDgwVmBxSHw",
+        authDomain: "the-arafat-earnings.firebaseapp.com",
+        databaseURL: "https://the-arafat-earnings-default-rtdb.firebaseio.com",
+        projectId: "the-arafat-earnings",
+        storageBucket: "the-arafat-earnings.firebasestorage.app",
+        messagingSenderId: "1082223011616",
+        appId: "1:1082223011616:web:3de7e7438ca002dda6d945",
+        measurementId: "G-T9NY7D2RW8"
+        };
 
-        db.ref('appConfig/firebase').once('value').then(snapshot => {
-            firebaseConfig = snapshot.val();
-            if (firebaseConfig && firebaseConfig.apiKey) {
-                firebase.initializeApp(firebaseConfig);
-                setupAuthentication(); 
-            } else { throw new Error("Firebase configuration not found."); }
-        }).catch(error => {
-            console.error("Configuration Load Error:", error);
-            document.body.innerHTML = `<div style="text-align:center; padding: 50px; color: white;"><h1>Application Error</h1></div>`;
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        const CLIENT_VERSION = "1.0";
+
+        let appConfig = {
+            APP_NAME: "Monkey Ads Earning V1", ADS_PER_DAY_LIMIT: 50, POINTS_PER_AD: 100,
+            MIN_WITHDRAW_POINTS: 20, REFERRAL_BONUS_REFERRER: 500, REFERRAL_BONUS_REFEREE: 200,
+            MONETAG_ZONE_ID: '9892740', 
+            TELEGRAM_BOT_TOKEN: "8226525631:AAFa76pDvtHEy8ddIAulVBEPrt6UNQsbXGA", // <-- আপনার বট টোকেন এখানে দিন
+            TELEGRAM_CHAT_ID: "-1003175559968", // <-- আপনার চ্যাট আইডি এখানে দিন
+            DEVELOPER_TELEGRAM_PROFILE_LINK: "https://t.me/marketingexpertsbd1",
+            OFFICIAL_CHANNEL_LINK: "https://t.me/marketingexpertsbd1", SUPPORT_GROUP_LINK: "https://t.me/marketingexpertsbd",
+            REFERRAL_BOT_LINK: "https://t.me/your_referral_bot", BONUS_CHANNELS: [],
+            PAYMENT_METHODS: [{name: 'Bkash'}, {name: 'Nagad'}],
+            dailyBonusAmount: 100, 
+            levelingConfig: {
+                xpPerAd: 10,
+                levels: [
+                    { xpThreshold: 0, name: "Bronze" },
+                    { xpThreshold: 1000, name: "Silver" },
+                    { xpThreshold: 5000, name: "Gold" }
+                ]
+            }
+        };
+
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const profileNameDisplay = document.getElementById('profileNameDisplay');
+        const profilePic = document.getElementById('profilePic');
+        const editNameBtn = document.getElementById('editNameBtn');
+        const userPointsDisplay = document.getElementById('userPointsDisplay');
+        const adsWatchedTodayEl = document.getElementById('adsWatchedToday');
+        const adsLeftTodayEl = document.getElementById('adsLeftToday');
+        const totalAdsWatchedEl = document.getElementById('totalAdsWatched');
+        const mainContent = document.getElementById('mainContent');
+        const bottomNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+        const adModal = document.getElementById('adModal');
+        const adModalTitle = document.getElementById('adModalTitle');
+        const adSpinner = document.getElementById('adSpinner');
+        const adStatusMessage = document.getElementById('adStatusMessage');
+        const adCloseBtn = document.getElementById('adCloseBtn');
+        const toast = document.getElementById('toast');
+        const appHeaderTitle = document.getElementById('appHeaderTitle');
+        const blockedOverlay = document.getElementById('blockedOverlay');
+        const noticeModalOverlay = document.getElementById('noticeModalOverlay');
+        const noticeModalBody = document.getElementById('noticeModalBody');
+        const noticeCloseBtn = document.getElementById('noticeCloseBtn');
+        const appContainer = document.getElementById('appContainer');
+        const maintenanceOverlay = document.getElementById('maintenanceOverlay');
+        const maintenanceMessageBody = document.getElementById('maintenanceMessageBody');
+        const versionMismatchOverlay = document.getElementById('versionMismatchOverlay');
+        const personalNoticeModalOverlay = document.getElementById('personalNoticeModalOverlay');
+        const personalNoticeModalBody = document.getElementById('personalNoticeModalBody');
+        const personalNoticeCloseBtn = document.getElementById('personalNoticeCloseBtn');
+        
+        let deviceId;
+        let currentUser = null;
+        let currentPage = 'home';
+        let initialUserLoadComplete = false;
+
+        function refreshEntireUI() {
+            if (!currentUser || !appConfig) return;
+            if (appConfig.isMaintenanceMode) {
+                maintenanceMessageBody.innerText = appConfig.maintenanceMessage || "The app is currently under maintenance. We will be back soon!";
+                maintenanceOverlay.style.display = 'flex';
+                appContainer.style.display = 'none';
+                return;
+            } else {
+                maintenanceOverlay.style.display = 'none';
+            }
+            if (appConfig.appVersion && appConfig.appVersion !== CLIENT_VERSION) {
+                versionMismatchOverlay.style.display = 'flex';
+                appContainer.style.display = 'none';
+                return;
+            } else {
+                versionMismatchOverlay.style.display = 'none';
+            }
+            if (currentUser.isBlocked) {
+                blockedOverlay.style.display = 'flex';
+                appContainer.style.display = 'none';
+                return;
+            } else {
+                blockedOverlay.style.display = 'none';
+            }
+            appContainer.style.display = 'block';
+            appHeaderTitle.textContent = appConfig.APP_NAME || "Monkey Ads Earning V1";
+            updateUI();
+            navigateTo(currentPage);
+        }
+
+        async function initializeApp() {
+            db.ref('config').on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const remoteConfig = snapshot.val();
+                    Object.assign(appConfig, remoteConfig);
+                    if (initialUserLoadComplete) {
+                        refreshEntireUI();
+                    }
+                    if (remoteConfig.isNoticeActive && remoteConfig.globalNoticeText && !sessionStorage.getItem('noticeShown')) {
+                        noticeModalBody.innerText = remoteConfig.globalNoticeText;
+                        noticeModalOverlay.classList.add('show');
+                        sessionStorage.setItem('noticeShown', 'true');
+                    }
+                } else {
+                    db.ref('config').set(appConfig);
+                }
+            });
+            
+            db.ref('bonusChannels').on('value', (snapshot) => {
+                if(snapshot.exists()){
+                    appConfig.BONUS_CHANNELS = Object.values(snapshot.val()); 
+                    if (initialUserLoadComplete) refreshEntireUI();
+                }
+            });
+
+            deviceId = localStorage.getItem('taskNetworkDeviceId');
+            if (!deviceId) {
+                deviceId = generateUniqueId();
+                localStorage.setItem('taskNetworkDeviceId', deviceId);
+            }
+            if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
+                deviceId = `tg_${Telegram.WebApp.initDataUnsafe.user.id}`;
+            }
+
+            const userRef = db.ref('users/' + deviceId);
+            userRef.on('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    currentUser = snapshot.val();
+                    userRef.update({ lastLoginDate: new Date().toISOString() });
+                    if (currentUser.personalNotice && !sessionStorage.getItem(`personalNotice_${currentUser.personalNotice.timestamp}`)) {
+                        personalNoticeModalBody.innerText = currentUser.personalNotice.message;
+                        personalNoticeModalOverlay.classList.add('show');
+                        sessionStorage.setItem(`personalNotice_${currentUser.personalNotice.timestamp}`, 'true');
+                    }
+                } else {
+                    const newUser = {
+                        deviceId: deviceId, name: 'Guest User', telegramId: null,
+                        photoUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+                        points: 0, adsWatchedToday: 0, totalAdsWatchedLifetime: 0,
+                        lastAdWatchDate: null, claimedBonuses: [], referralCode: generateReferralCode(),
+                        referredBy: null, referredUsers: [], isBlocked: false,
+                        registrationDate: new Date().toISOString(), lastLoginDate: new Date().toISOString(),
+                        level: 1, xp: 0, lastDailyBonusClaimedDate: null
+                    };
+                    if (window.Telegram && Telegram.WebApp.initDataUnsafe.user) {
+                        const tgUser = Telegram.WebApp.initDataUnsafe.user;
+                        newUser.name = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || `User${tgUser.id}`;
+                        newUser.telegramId = tgUser.id;
+                        newUser.photoUrl = tgUser.photo_url || newUser.photoUrl;
+                    }
+                    currentUser = newUser;
+                    await userRef.set(currentUser);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const refCodeFromUrl = urlParams.get('start') || urlParams.get('ref');
+                    if (refCodeFromUrl) await applyReferral(refCodeFromUrl);
+                }
+                
+                initialUserLoadComplete = true;
+                refreshEntireUI();
+            });
+        }
+        
+        async function logTransaction(userId, type, amount, description) {
+            if (!userId) return;
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                type: type, // 'credit' or 'debit'
+                amount: amount,
+                description: description
+            };
+            await db.ref(`transactionLogs/${userId}`).push(logEntry);
+        }
+
+        function showToast(message, duration = 3000) { toast.textContent = message; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, duration); }
+        function generateUniqueId() { return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); }); }
+        function generateReferralCode() { return Math.random().toString(36).substring(2, 10).toUpperCase(); }
+        async function applyReferral(referrerCode) { /* ... (অপরিবর্তিত) */ }
+        async function saveUserState() { if (currentUser && deviceId) { await db.ref('users/' + deviceId).set(currentUser); } }
+        
+        document.addEventListener('DOMContentLoaded', () => { 
+            if (window.Telegram && Telegram.WebApp) Telegram.WebApp.expand(); 
+            initializeApp(); 
+            applyTheme(localStorage.getItem('galaxyEarnTheme') || 'light'); 
+            themeToggleBtn.addEventListener('click', toggleTheme); 
+            editNameBtn.addEventListener('click', promptForNewName); 
+            bottomNavItems.forEach(item => { item.addEventListener('click', (e) => { e.preventDefault(); currentPage = item.dataset.page; refreshEntireUI(); }); }); 
+            adCloseBtn.addEventListener('click', closeAdModalAndReward); 
+            noticeCloseBtn.addEventListener('click', () => { noticeModalOverlay.classList.remove('show'); });
+            personalNoticeCloseBtn.addEventListener('click', () => {
+                personalNoticeModalOverlay.classList.remove('show');
+                if (currentUser && currentUser.personalNotice) {
+                    db.ref(`users/${deviceId}/personalNotice`).remove();
+                }
+            });
         });
 
+        function applyTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); themeToggleBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; localStorage.setItem('galaxyEarnTheme', theme); }
+        function toggleTheme() { applyTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark'); }
         
-        function setupAuthentication() {
-            const auth = firebase.auth();
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    document.getElementById('auth-container').style.display = 'none';
-                    document.getElementById('app-container').style.display = 'block';
-                    initializeAppLogic(user); 
-                } else {
-                    document.getElementById('auth-container').style.display = 'block';
-                    document.getElementById('app-container').style.display = 'none';
-                }
-            });
+        function updateUI() { 
+            if (!currentUser) return; 
+            profileNameDisplay.innerHTML = `${currentUser.name} <i class="fas fa-check-circle verified-badge"></i> <button class="edit-name-btn" id="editNameBtn"><i class="fas fa-pencil-alt"></i></button>`; 
+            document.getElementById('editNameBtn').addEventListener('click', promptForNewName); 
+            userPointsDisplay.innerHTML = `<i class="fas fa-coins"></i> ${currentUser.points || 0} Points`; 
+            const today = new Date().toLocaleDateString(); 
+            if (currentUser.lastAdWatchDate !== today) { currentUser.adsWatchedToday = 0; } 
+            adsWatchedTodayEl.textContent = currentUser.adsWatchedToday || 0; 
+            adsLeftTodayEl.textContent = appConfig.ADS_PER_DAY_LIMIT - (currentUser.adsWatchedToday || 0); 
+            totalAdsWatchedEl.textContent = currentUser.totalAdsWatchedLifetime || 0; 
+            if (currentUser.photoUrl) { profilePic.src = currentUser.photoUrl; }
+
+            const currentLevel = currentUser.level || 1;
+            const currentXP = currentUser.xp || 0;
+            const levels = appConfig.levelingConfig.levels;
+            
+            let currentLevelInfo = levels[currentLevel - 1] || levels[0];
+            let nextLevelInfo = levels[currentLevel] || null;
+
+            document.getElementById('levelBadge').innerText = `Level ${currentLevel} (${currentLevelInfo.name})`;
+
+            if (nextLevelInfo) {
+                const xpForNextLevel = nextLevelInfo.xpThreshold - (currentLevelInfo.xpThreshold || 0);
+                const xpProgress = currentXP - (currentLevelInfo.xpThreshold || 0);
+                const progressPercent = (xpProgress / xpForNextLevel) * 100;
+                document.getElementById('xpText').innerText = `${xpProgress}/${xpForNextLevel} XP`;
+                document.getElementById('xpBar').style.width = `${Math.min(100, progressPercent)}%`;
+            } else {
+                document.getElementById('xpText').innerText = `Max Level Reached!`;
+                document.getElementById('xpBar').style.width = `100%`;
+            }
         }
 
-        // নতুন যুক্ত করা কোড: লগইন/রেজিস্ট্রেশন ফর্ম अदল-বদল করার ফাংশন
-        function toggleAuthForms() {
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            document.getElementById('login-error').innerText = '';
-            document.getElementById('register-error').innerText = '';
-            if (loginForm.style.display === 'none') {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
+        async function checkLevelUp() {
+            if (!currentUser || !appConfig.levelingConfig) return;
+            const currentLevel = currentUser.level || 1;
+            const nextLevelInfo = appConfig.levelingConfig.levels[currentLevel];
+            if (nextLevelInfo && currentUser.xp >= nextLevelInfo.xpThreshold) {
+                currentUser.level += 1;
+                await saveUserState();
+                showToast(`Congratulations! You've reached Level ${currentUser.level}!`);
+            }
+        }
+
+        async function promptForNewName() { const newName = prompt("Enter your new name:", currentUser.name); if (newName && newName.trim()) { currentUser.name = newName.trim(); await saveUserState(); showToast("Name updated successfully!"); } }
+        function navigateTo(page) { document.querySelector('.bottom-nav .nav-item.active')?.classList.remove('active'); document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active'); const pageRenderers = { 'home': renderHomePage, 'tasks': renderTasksPage, 'bonus': renderBonusPage, 'withdraw': renderWithdrawPage, 'referral': renderReferralPage }; if (pageRenderers[page]) pageRenderers[page](); }
+        
+        function renderHomePage() { mainContent.innerHTML = `<div class="task-card"><h2 class="section-title"><i class="fas fa-home"></i> Welcome</h2><p class="task-description">Welcome to ${appConfig.APP_NAME}, ${currentUser.name.split(' ')[0]}! Start earning points by completing tasks, watching ads, and inviting friends.</p><div class="stats-display" style="justify-content: space-between; margin-top: 20px; gap: 8px;"><div class="stat-item" style="flex: 1; margin: 0 4px;"><div class="stat-value">${appConfig.ADS_PER_DAY_LIMIT - (currentUser.adsWatchedToday || 0)}</div><div class="stat-label">Ads Left</div></div><div class="stat-item" style="flex: 1; margin: 0 4px;"><div class="stat-value">${currentUser.points || 0}</div><div class="stat-label">Points</div></div><div class="stat-item" style="flex: 1; margin: 0 4px;"><div class="stat-value">${currentUser.referredUsers ? currentUser.referredUsers.length : 0}</div><div class="stat-label">Referrals</div></div></div></div><div style="margin-top: 15px; text-align: center;"><a href="${appConfig.OFFICIAL_CHANNEL_LINK}" target="_blank" class="btn btn-secondary"><i class="fab fa-telegram-plane"></i> Join Our Channel</a></div><div class="developer-footer">Developed by <a href="${appConfig.DEVELOPER_TELEGRAM_PROFILE_LINK}" target="_blank" class="developer-link">JR_ZONE</a></div>`; }
+        function renderTasksPage() { const adsWatched = currentUser.adsWatchedToday || 0; const adsLeft = appConfig.ADS_PER_DAY_LIMIT - adsWatched; const progressPercent = (adsWatched / appConfig.ADS_PER_DAY_LIMIT) * 100; mainContent.innerHTML = `<div class="task-card"><div class="task-header"><div class="task-icon"><i class="fas fa-ad"></i></div><div class="task-title">Watch Ads</div><div class="reward-badge">+${appConfig.POINTS_PER_AD}</div></div><p class="task-description">Watch short video ads to earn points. You can watch up to ${appConfig.ADS_PER_DAY_LIMIT} ads per day.</p><div class="progress-container"><div class="progress-text"><span>${adsWatched}/${appConfig.ADS_PER_DAY_LIMIT} watched</span><span>${adsLeft} left</span></div><div class="progress-bar"><div class="progress" style="width: ${progressPercent}%"></div></div></div><button class="btn btn-primary" id="watchDailyAdBtn" ${adsLeft <= 0 ? 'disabled' : ''}><i class="fas fa-play"></i> Watch Ad & Earn ${appConfig.POINTS_PER_AD} Points</button></div><div class="developer-footer">Developed by <a href="${appConfig.DEVELOPER_TELEGRAM_PROFILE_LINK}" target="_blank" class="developer-link">JR_ZONE</a></div>`; if (adsLeft > 0) { document.getElementById('watchDailyAdBtn').addEventListener('click', handleWatchDailyAd); } }
+        
+        function renderBonusPage() { 
+            let channelsHtml = (appConfig.BONUS_CHANNELS || []).map(channel => { const isClaimed = currentUser.claimedBonuses && currentUser.claimedBonuses.includes(channel.id); const linkIsValid = channel.link && !channel.link.toLowerCase().includes("your_"); return `<li class="channel-item"><div class="channel-info"><div class="channel-icon"><i class="${channel.icon}"></i></div><div><div class="channel-name">${channel.name}</div><div class="channel-reward">+${channel.reward} Points</div></div></div>${ linkIsValid ? `<a href="${channel.link}" target="_blank" class="join-btn ${isClaimed ? 'claimed' : ''}" data-channel-id="${channel.id}" data-reward="${channel.reward}" onclick="handleBonusLinkClick(event, this)">${isClaimed ? 'Claimed' : 'Join'}</a>` : `<span style="font-size:0.75rem; color: var(--text-secondary);">Coming Soon</span>` }</li>`; }).join(''); 
+            
+            const today = new Date().toLocaleDateString();
+            const alreadyClaimedToday = currentUser.lastDailyBonusClaimedDate === today;
+            const dailyBonusCard = `
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="task-title">Daily Bonus</div>
+                        <div class="reward-badge">+${appConfig.dailyBonusAmount || 100}</div>
+                    </div>
+                    <p class="task-description">Come back every day to claim your free bonus points!</p>
+                    <button class="btn ${alreadyClaimedToday ? 'btn-disabled' : 'btn-primary'}" id="claimDailyBonusBtn" ${alreadyClaimedToday ? 'disabled' : ''}>
+                        ${alreadyClaimedToday ? 'Claimed Today' : `Claim ${appConfig.dailyBonusAmount || 100} Points`}
+                    </button>
+                </div>`;
+
+            mainContent.innerHTML = `${dailyBonusCard}<div class="task-card"><h2 class="section-title"><i class="fas fa-gift"></i> Channel Rewards</h2><p class="task-description">Join our community channels to earn bonus points. Visit the channel and return to claim your reward.</p><ul class="channel-list">${channelsHtml || '<p>No bonus tasks available right now.</p>'}</ul></div><div class="developer-footer">Developed by <a href="${appConfig.DEVELOPER_TELEGRAM_PROFILE_LINK}" target="_blank" class="developer-link">JR_ZONE</a></div>`; 
+
+            if (!alreadyClaimedToday) {
+                document.getElementById('claimDailyBonusBtn').addEventListener('click', handleClaimDailyBonus);
             }
         }
         
-        function loginUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const errorEl = document.getElementById('login-error');
-            firebase.auth().signInWithEmailAndPassword(email, password).catch(err => errorEl.innerText = err.message);
-        }
-
-        function resetPassword() {
-            const email = document.getElementById('login-email').value;
-            const errorEl = document.getElementById('login-error');
-            if (!email) {
-                errorEl.innerText = "Please enter your email in the login form to reset password.";
+        async function handleClaimDailyBonus() {
+            const today = new Date().toLocaleDateString();
+            if (currentUser.lastDailyBonusClaimedDate === today) {
+                showToast("You have already claimed your daily bonus today.");
                 return;
             }
-            firebase.auth().sendPasswordResetEmail(email)
-                .then(() => {
-                    alert("A password reset link has been sent to your email address.");
-                    errorEl.innerText = "";
-                })
-                .catch(err => errorEl.innerText = err.message);
+            const bonusAmount = appConfig.dailyBonusAmount || 100;
+            currentUser.points = (currentUser.points || 0) + bonusAmount;
+            currentUser.lastDailyBonusClaimedDate = today;
+
+            await logTransaction(deviceId, 'credit', bonusAmount, 'Daily Bonus');
+            await saveUserState();
+
+            showToast(`+${bonusAmount} points for daily bonus!`);
+            renderBonusPage();
         }
 
-        function registerUser() {
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-password-confirm').value;
-            const username = document.getElementById('register-username').value.trim();
-            const referralCode = document.getElementById('register-referral').value.trim();
-            const errorEl = document.getElementById('register-error');
-
-            if (!username) { errorEl.innerText = "Please enter a username."; return; }
-            if (password !== confirmPassword) { errorEl.innerText = "Passwords do not match."; return; }
-
-            firebase.database().ref('users').orderByChild('userName').equalTo("@" + username).once('value', snapshot => {
-                if (snapshot.exists()) {
-                    errorEl.innerText = "This username is already taken. Please choose another one.";
-                    return;
-                }
-                
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        const userId = userCredential.user.uid;
-                        const finalUsername = "@" + username;
-                        const initialUserData = {
-                            userName: finalUsername, watchedAds: 0, earnedPoints: 0,
-                            isBanned: false, lastAdWatchDate: '', dailyAdsWatched: 0,
-                            createdAt: new Date().toISOString(), referralsMade: 0,
-                            adsDisabled: false // নতুন: ডিফল্ট ভ্যালু
-                        };
-
-                        if (referralCode) {
-                            handleReferral(referralCode, userId, initialUserData);
-                        } else {
-                            firebase.database().ref('users/' + userId).set(initialUserData);
-                        }
-                    })
-                    .catch(err => errorEl.innerText = err.message);
-            });
-        }
-        function logoutUser() {
-            if (confirm("Are you sure you want to logout?")) {
-                firebase.auth().signOut();
-            }
-        }
-        
-        function initializeAppLogic(user) {
-            const database = firebase.database();
-            const currentAppVersion = "1.0";
-            const userId = user.uid; 
-
-            let userData = {}, earnedPoints = 0.00, watchedAdsCount = 0, autoAdInterval;
-            
-            // নতুন ডিফল্ট সেটিংস সহ আপডেটেড
-            let appSettings = { 
-                minWithdrawPoints: 5, pointsPerAd: 1.00, autoAdIntervalSeconds: 5, adZoneId: '', backupAdZoneId: '', 
-                paymentMethods: ['bkash'], announcement: '', adsEnabled: true, dailyAdLimit: 20, referrerBonus: 5, 
-                refereeBonus: 2, dailyCheckinBonus: 1, currentVersion: "1.0", appName: "The_Anisur_Earnings",
-                devInfo: "Developer by JR Zone 2025", withdrawalFeePercentage: 0, primaryColor: 'green',
-                userLevels: '[{"name":"Bronze","minAds":100,"multiplier":1.1}]', 
-                bonusEvent: { multiplier: 1, expiresAt: 0 } 
-            };
-            
-            const userRef = database.ref('users/' + userId);
-            const settingsRef = database.ref('settings');
-
-            function logTransaction(type, amount, details) {
-                database.ref(`transactions/${userId}`).push({
-                    type: type, amount: amount, details: details, timestamp: new Date().toISOString()
+        function renderWithdrawPage() {
+            let paymentOptionsHtml = '<option value="">Select method</option>';
+            if (appConfig.PAYMENT_METHODS && appConfig.PAYMENT_METHODS.length > 0) {
+                appConfig.PAYMENT_METHODS.forEach(method => {
+                    paymentOptionsHtml += `<option value="${method.name}">${method.name}</option>`;
                 });
-            }
-            
-            async function handleReferral(referralCode, newUserId, newUserData) {
-                const referrerSnapshot = await database.ref('users').orderByChild('userName').equalTo(referralCode).once('value');
-                if (referrerSnapshot.exists()) {
-                    const referrerData = referrerSnapshot.val();
-                    const referrerId = Object.keys(referrerData)[0];
-                    const referrer = referrerData[referrerId];
-
-                    const refereeBonus = appSettings.refereeBonus || 0;
-                    const referrerBonus = appSettings.referrerBonus || 0;
-
-                    newUserData.earnedPoints += refereeBonus;
-                    newUserData.referredBy = referrerId;
-                    
-                    await database.ref('users/' + newUserId).set(newUserData);
-                    if (refereeBonus > 0) logTransaction('referee_bonus', refereeBonus, `Bonus for joining with code: ${referralCode}`);
-
-                    const newReferrerPoints = (referrer.earnedPoints || 0) + referrerBonus;
-                    const newReferralsMade = (referrer.referralsMade || 0) + 1;
-                    await database.ref('users/' + referrerId).update({ earnedPoints: newReferrerPoints, referralsMade: newReferralsMade });
-                    if (referrerBonus > 0) {
-                        database.ref(`transactions/${referrerId}`).push({
-                            type: 'referrer_bonus', amount: referrerBonus,
-                            details: `Bonus for referring user: ${newUserData.userName}`,
-                            timestamp: new Date().toISOString()
-                        });
-                    }
-                } else {
-                    await database.ref('users/' + newUserId).set(newUserData);
-                }
+            } else {
+                 paymentOptionsHtml = '<option value="">No methods available</option>';
             }
 
-            settingsRef.on('value', (snapshot) => {
-                const settings = snapshot.val();
-                if (settings) {
-                    appSettings = { ...appSettings, ...settings };
-                    if (appSettings.currentVersion && appSettings.currentVersion !== currentAppVersion) {
-                        document.getElementById('update-notice').style.display = 'block';
-                        document.getElementById('app-container').style.pointerEvents = 'none';
-                        return;
-                    }
-                    if (!window.adsInitialized) { initializeAds(appSettings.adZoneId, appSettings.backupAdZoneId); }
-                    
-                    // নতুন যুক্ত করা কোড: ডায়নামিক UI আপডেট
-                    document.documentElement.style.setProperty('--primary-color', appSettings.primaryColor || 'green');
-                    document.getElementById('app-title').innerText = appSettings.appName || "Earnings App";
-                    document.getElementById('dev-info').innerText = appSettings.devInfo || "Developer Info";
-                    
-                    const bonusNoticeEl = document.getElementById('bonus-event-notice');
-                    if (appSettings.bonusEvent && appSettings.bonusEvent.expiresAt > Date.now()) {
-                        bonusNoticeEl.innerText = `BONUS EVENT! All ad earnings are multiplied by x${appSettings.bonusEvent.multiplier}!`;
-                        bonusNoticeEl.style.display = 'block';
-                    } else {
-                        bonusNoticeEl.style.display = 'none';
-                    }
+            mainContent.innerHTML = `<div class="task-card"><h2 class="section-title"><i class="fas fa-wallet"></i> Withdraw</h2><p class="task-description">Convert your points to real money. Minimum withdrawal is ${appConfig.MIN_WITHDRAW_POINTS} points.</p><div class="input-group"><label class="input-label">Amount (Points)</label><input type="number" id="withdrawAmountInput" class="input-field" placeholder="Enter amount"></div><div class="input-group"><label class="input-label">Payment Method</label><select id="withdrawMethodSelect" class="select-field">${paymentOptionsHtml}</select></div><div class="input-group"><label class="input-label">Account Number/ID</label><input type="text" id="withdrawAccountInput" class="input-field" placeholder="Enter your account details"></div><button class="btn btn-primary" id="submitWithdrawBtn"><i class="fas fa-paper-plane"></i> Submit Request</button><p class="status-message" id="withdrawStatusMsg"></p></div><div class="developer-footer">Developed by <a href="${appConfig.DEVELOPER_TELEGRAM_PROFILE_LINK}" target="_blank" class="developer-link">JR_ZONE</a></div>`; 
+            document.getElementById('submitWithdrawBtn').addEventListener('click', handleSubmitWithdrawal); 
+        }
 
-                    const feeInfoEl = document.getElementById('withdraw-fee-info');
-                    if(appSettings.withdrawalFeePercentage > 0) {
-                        feeInfoEl.innerText = `Note: A ${appSettings.withdrawalFeePercentage}% processing fee will be applied to all withdrawals.`;
-                    } else {
-                        feeInfoEl.innerText = '';
-                    }
-
-                    updateUI();
-                }
-            });
-            
-            function updateDynamicUI() {
-                const watchAdBtn = document.getElementById('watch-ad-btn');
-                const autoAdBtn = document.getElementById('auto-ad-btn');
-                const adsEnabledByAdmin = appSettings.adsEnabled;
-                
-                // নতুন যুক্ত করা কোড: নির্দিষ্ট ব্যবহারকারীর জন্য বিজ্ঞাপন নিষ্ক্রিয় করা
-                if (userData.adsDisabled) {
-                    watchAdBtn.innerText = "Ads Disabled for You"; watchAdBtn.disabled = true;
-                    autoAdBtn.disabled = true; stopAutoAds(); return;
-                }
-
-                if (!adsEnabledByAdmin) { watchAdBtn.innerText = "Ads Disabled by Admin"; watchAdBtn.disabled = true; autoAdBtn.disabled = true; stopAutoAds(); } 
-                else if (!window.adFunctionReady) { watchAdBtn.innerText = window.adLoadingStatus || "Loading Ads..."; watchAdBtn.disabled = true; autoAdBtn.disabled = true; } 
-                else { watchAdBtn.innerText = "Watch Ad"; watchAdBtn.disabled = false; autoAdBtn.disabled = false; }
+        async function renderReferralPage() { const referralLink = `${appConfig.REFERRAL_BOT_LINK}?start=${currentUser.referralCode}`; const referredUsersCount = currentUser.referredUsers ? currentUser.referredUsers.length : 0; let referredUsersListHtml = ''; if (referredUsersCount > 0) { referredUsersListHtml = `<h3 style="margin: 20px 0 10px; font-size: 1rem; color: var(--text-secondary);">Your Referrals (${referredUsersCount})</h3><div class="referred-users" id="referredUsersList"><p>Loading referred users...</p></div>`; } else { referredUsersListHtml = `<div class="empty-state" style="padding: 20px 0;"><i class="fas fa-users"></i><p>You haven't referred anyone yet.</p></div>`; } mainContent.innerHTML = `<div class="task-card"><h2 class="section-title"><i class="fas fa-share-alt"></i> Refer & Earn</h2><p class="task-description">Invite friends and earn ${appConfig.REFERRAL_BONUS_REFERRER} points for each successful referral. They'll get ${appConfig.REFERRAL_BONUS_REFEREE} points too!</p><div class="referral-container"><label class="input-label">Your Referral Code</label><div class="referral-input-group"><input type="text" id="referralCodeDisplay" class="referral-input" value="${currentUser.referralCode}" readonly><button class="copy-btn" id="copyReferralCodeBtn">Copy</button></div><label class="input-label">Your Referral Link</label><div class="referral-input-group"><input type="text" id="referralLinkDisplay" class="referral-input" value="${referralLink}" readonly><button class="copy-btn" id="copyReferralLinkBtn">Copy</button></div><button class="btn btn-secondary" id="shareReferralLinkBtn" style="margin-top: 15px; width: 100%;"><i class="fas fa-share-alt"></i> Share Link</button></div><div class="referral-stats"><div class="stat-card"><div class="stat-number">${appConfig.REFERRAL_BONUS_REFERRER}</div><div class="stat-title">Per Referral</div></div><div class="stat-card"><div class="stat-number">${referredUsersCount}</div><div class="stat-title">Total</div></div><div class="stat-card"><div class="stat-number">${referredUsersCount * appConfig.REFERRAL_BONUS_REFERRER}</div><div class="stat-title">Earned</div></div></div>${referredUsersListHtml}</div><div class="developer-footer">Developed by <a href="${appConfig.DEVELOPER_TELEGRAM_PROFILE_LINK}" target="_blank" class="developer-link">JR_ZONE</a></div>`; document.getElementById('copyReferralCodeBtn').addEventListener('click', () => { navigator.clipboard.writeText(currentUser.referralCode).then(()=>showToast("Code Copied!")); }); document.getElementById('copyReferralLinkBtn').addEventListener('click', () => { navigator.clipboard.writeText(referralLink).then(()=>showToast("Link Copied!")); }); document.getElementById('shareReferralLinkBtn').addEventListener('click', () => { if(navigator.share){ navigator.share({title: `Join ${appConfig.APP_NAME}`, text: `I'm earning rewards on ${appConfig.APP_NAME}. Join me and get ${appConfig.REFERRAL_BONUS_REFEREE} bonus points!`, url: referralLink}); } else { showToast("Share not supported. Copy the link manually."); }}); }
+        
+        let adWatchedSuccessfully = false; let adRewardPending = false;
+        
+        async function handleWatchDailyAd() {
+            adModal.classList.add('show');
+            adModalTitle.textContent = "Loading Ad...";
+            adSpinner.style.display = 'block';
+            adStatusMessage.textContent = "Please wait while we load the ad.";
+            adCloseBtn.style.display = 'none';
+            adRewardPending = true;
+            const zoneId = appConfig.MONETAG_ZONE_ID;
+            if (!zoneId) {
+                adStatusMessage.textContent = "Ad service is not configured. Please contact support.";
+                adSpinner.style.display = 'none';
+                setTimeout(() => adModal.classList.remove('show'), 2000);
+                return;
             }
-
-            userRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.isBanned) { document.body.innerHTML = `<div style="text-align:center; padding-top: 50px;"><h1>Access Denied</h1><p>Your account has been banned.</p></div>`; return; }
-                if (data) {
-                    userData = data;
-                    watchedAdsCount = data.watchedAds || 0;
-                    earnedPoints = data.earnedPoints || 0.00;
-                    document.getElementById("user-name").textContent = data.userName || "User";
-                    if (data.notice) { alert(`Admin Notice: ${data.notice}`); userRef.child('notice').remove(); }
-                } else {
-                    const initialUsername = user.email.split('@')[0];
-                    userData = { userName: "@" + initialUsername, watchedAds:0, earnedPoints:0, isBanned:false, lastAdWatchDate:'', dailyAdsWatched:0, createdAt:new Date().toISOString(), referralsMade: 0, adsDisabled: false };
-                    userRef.set(userData);
-                }
-                updateUI();
-            });
-            
-            function getTodayDateString() {
-                const today = new Date();
-                return `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-            }
-            
-            // নতুন যুক্ত করা কোড: ব্যবহারকারীর লেভেল নির্ণয়ের ফাংশন
-            function getUserLevel() {
-                try {
-                    const levels = JSON.parse(appSettings.userLevels || '[]');
-                    let currentLevel = { name: "Newbie", multiplier: 1.0 };
-                    if (!Array.isArray(levels)) return currentLevel;
-                    const sortedLevels = levels.sort((a, b) => (b.minAds || 0) - (a.minAds || 0));
-                    for (const level of sortedLevels) {
-                        if (watchedAdsCount >= level.minAds) {
-                            currentLevel = level;
-                            break;
-                        }
-                    }
-                    return currentLevel;
-                } catch (e) {
-                    console.error("Could not parse user levels:", e);
-                    return { name: "Newbie", multiplier: 1.0 };
-                }
-            }
-
-            function checkDailyAdLimit() {
-                const todayStr = getTodayDateString();
-                if (userData.lastAdWatchDate !== todayStr) { userData.dailyAdsWatched = 0; userRef.update({ dailyAdsWatched: 0, lastAdWatchDate: todayStr }); }
-                if (userData.dailyAdsWatched >= appSettings.dailyAdLimit) {
-                    if (appSettings.adsEnabled && window.adFunctionReady && !userData.adsDisabled) {
-                        document.getElementById('watch-ad-btn').disabled = true;
-                        document.getElementById('auto-ad-btn').disabled = true;
-                        document.getElementById('watch-ad-btn').innerText = "Daily Limit Reached";
-                    }
-                    stopAutoAds();
-                    return false;
-                }
-                return true;
-            }
-
-            async function initializeAds(primaryZoneId, backupZoneId) {
-                window.adsInitialized = true; window.adFunctionReady = false;
-                if (primaryZoneId) {
-                    window.adLoadingStatus = "Loading Ads..."; updateDynamicUI();
-                    try { const loadedZoneId = await tryLoadAdNetwork(primaryZoneId); window.activeAdZoneId = loadedZoneId; window.adFunctionReady = true; console.log(`Primary ad network (${loadedZoneId}) loaded.`); updateUI(); return;
-                    } catch (error) { console.error(`Primary ad network failed:`, error); }
-                }
-                if (backupZoneId) {
-                    window.adLoadingStatus = "Trying backup..."; updateDynamicUI();
-                    try { const loadedZoneId = await tryLoadAdNetwork(backupZoneId); window.activeAdZoneId = loadedZoneId; window.adFunctionReady = true; console.log(`Backup ad network (${loadedZoneId}) loaded.`); updateUI(); return;
-                    } catch (error) { console.error(`Backup ad network failed:`, error); }
-                }
-                window.adLoadingStatus = "Ads Unavailable"; updateDynamicUI(); console.log("All ad networks failed to load.");
-            }
-
-            function tryLoadAdNetwork(zoneId) {
+            const sdkFunctionName = `show_${zoneId}`;
+            const loadMonetagSdk = () => {
                 return new Promise((resolve, reject) => {
-                    const adFunctionName = 'show_' + zoneId;
-                    if (typeof window[adFunctionName] === 'function') { resolve(zoneId); return; }
+                    if (document.querySelector(`script[data-zone='${zoneId}']`)) {
+                        return resolve();
+                    }
                     const script = document.createElement('script');
                     script.src = '//libtl.com/sdk.js';
                     script.setAttribute('data-zone', zoneId);
-                    script.setAttribute('data-sdk', adFunctionName);
+                    script.setAttribute('data-sdk', sdkFunctionName);
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error("Ad script failed to load."));
                     document.body.appendChild(script);
-                    script.onerror = () => reject("Script download failed.");
-                    script.onload = () => {
-                        let attempts = 0;
-                        const interval = setInterval(() => {
-                            if (typeof window[adFunctionName] === 'function') { clearInterval(interval); resolve(zoneId); } 
-                            else if (++attempts >= 6) { clearInterval(interval); reject("Ad function verification timed out."); }
-                        }, 500);
-                    };
                 });
-            }
-
-            function updateUI() {
-                document.getElementById('watched-ads').textContent = watchedAdsCount;
-                document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
-                document.getElementById('daily-ads-watched').textContent = userData.dailyAdsWatched || 0;
-                const announcementBox = document.getElementById('announcement-box');
-                announcementBox.style.display = appSettings.announcement ? 'block' : 'none';
-                announcementBox.textContent = appSettings.announcement;
-                document.getElementById('daily-limit').textContent = appSettings.dailyAdLimit;
-
-                const dailyBtn = document.getElementById('daily-bonus-btn');
-                if (userData.lastCheckinDate === getTodayDateString()) {
-                    dailyBtn.disabled = true; dailyBtn.innerText = "Claimed Today";
+            };
+            try {
+                await loadMonetagSdk();
+                if (typeof window[sdkFunctionName] === 'function') {
+                    adStatusMessage.textContent = "Ad is ready. Please watch till the end.";
+                    window[sdkFunctionName]();
+                    adWatchedSuccessfully = true; 
+                    setTimeout(() => { 
+                        adSpinner.style.display = 'none';
+                        adStatusMessage.textContent = "You can now claim your reward!";
+                        adCloseBtn.style.display = 'block';
+                    }, 15000);
                 } else {
-                    dailyBtn.disabled = false; dailyBtn.innerText = "Daily Bonus";
+                    throw new Error("Ad function not available.");
                 }
-
-                // নতুন যুক্ত করা কোড: ব্যবহারকারীর লেভেল প্রদর্শন
-                const userLevel = getUserLevel();
-                document.getElementById('user-level-badge').textContent = userLevel.name;
-
-                updateProgressCircle(); updateDynamicUI(); checkDailyAdLimit();
+            } catch (error) {
+                console.error("Ad error:", error);
+                adStatusMessage.textContent = "Could not load ad. Please try again later.";
+                adSpinner.style.display = 'none';
+                adRewardPending = false;
+                adWatchedSuccessfully = false;
+                setTimeout(() => adModal.classList.remove('show'), 3000);
             }
+        }
 
-            window.watchAd = function() {
-                if (!checkDailyAdLimit() || !window.adFunctionReady) return;
-                const adFunctionName = 'show_' + window.activeAdZoneId;
-                if (typeof window[adFunctionName] === 'function') {
-                    window[adFunctionName]().then(() => {
-                        const todayStr = getTodayDateString();
-                        let dailyCount = (userData.lastAdWatchDate !== todayStr) ? 0 : (userData.dailyAdsWatched || 0);
-                        
-                        // নতুন যুক্ত করা কোড: বোনাস ও লেভেল অনুযায়ী পয়েন্ট ক্যালকুলেশন
-                        let basePoints = appSettings.pointsPerAd;
-                        let pointsGained = basePoints;
-                        let transactionDetails = `Watched Ad #${watchedAdsCount + 1}`;
-
-                        const userLevel = getUserLevel();
-                        if (userLevel.multiplier > 1) {
-                            pointsGained *= userLevel.multiplier;
-                            transactionDetails += ` (Level: ${userLevel.name} x${userLevel.multiplier})`;
-                        }
-
-                        if (appSettings.bonusEvent && appSettings.bonusEvent.expiresAt > Date.now()) {
-                            pointsGained *= appSettings.bonusEvent.multiplier;
-                            transactionDetails += ` (Event Bonus x${appSettings.bonusEvent.multiplier})`;
-                        }
-                        
-                        userRef.update({ 
-                            watchedAds: watchedAdsCount + 1, 
-                            earnedPoints: earnedPoints + pointsGained, 
-                            dailyAdsWatched: dailyCount + 1, 
-                            lastAdWatchDate: todayStr 
-                        }).then(() => {
-                            logTransaction('ad_watch', pointsGained, transactionDetails);
-                        });
-                    }).catch(err => { console.error("Ad error:", err); alert("Ad failed to display."); });
-                } else { alert("Ads are not ready. Please wait."); }
+        async function closeAdModalAndReward() {
+            if (!adRewardPending || !adWatchedSuccessfully) {
+                adModal.classList.remove('show');
+                return;
             }
+            adRewardPending = false;
+            adWatchedSuccessfully = false;
+            adModal.classList.remove('show');
             
-            window.claimDailyBonus = function() {
-                const todayStr = getTodayDateString();
-                if (userData.lastCheckinDate === todayStr) {
-                    alert("You have already claimed your daily bonus today."); return;
-                }
-                const bonusAmount = appSettings.dailyCheckinBonus || 1;
-                userRef.update({
-                    earnedPoints: earnedPoints + bonusAmount,
-                    lastCheckinDate: todayStr
-                }).then(() => {
-                    logTransaction('daily_bonus', bonusAmount, "Daily Check-in Bonus");
-                    alert(`You have received ${bonusAmount} points as a daily bonus!`);
-                });
+            const today = new Date().toLocaleDateString();
+            if (currentUser.lastAdWatchDate !== today) {
+                currentUser.adsWatchedToday = 0;
+            }
+            currentUser.adsWatchedToday = (currentUser.adsWatchedToday || 0) + 1;
+            currentUser.totalAdsWatchedLifetime = (currentUser.totalAdsWatchedLifetime || 0) + 1;
+            currentUser.points = (currentUser.points || 0) + appConfig.POINTS_PER_AD;
+            currentUser.lastAdWatchDate = today;
+
+            currentUser.xp = (currentUser.xp || 0) + (appConfig.levelingConfig.xpPerAd || 10);
+            await checkLevelUp();
+
+            await logTransaction(deviceId, 'credit', appConfig.POINTS_PER_AD, 'Watched Ad');
+            await saveUserState();
+
+            showToast(`+${appConfig.POINTS_PER_AD} points added!`);
+        }
+
+        async function handleBonusLinkClick(event, buttonElement) { /* ... (অপরিবর্তিত) */ }
+        
+        async function handleSubmitWithdrawal() {
+            const amount = parseInt(document.getElementById('withdrawAmountInput').value);
+            const method = document.getElementById('withdrawMethodSelect').value;
+            const account = document.getElementById('withdrawAccountInput').value.trim();
+            const statusMsg = document.getElementById('withdrawStatusMsg');
+
+            if (isNaN(amount) || amount <= 0) {
+                statusMsg.textContent = 'Please enter a valid amount.';
+                statusMsg.className = 'status-message error-message';
+                return;
+            }
+            if (!method) {
+                statusMsg.textContent = 'Please select a payment method.';
+                statusMsg.className = 'status-message error-message';
+                return;
+            }
+            if (!account) {
+                statusMsg.textContent = 'Please enter your account number.';
+                statusMsg.className = 'status-message error-message';
+                return;
+            }
+            if (amount < appConfig.MIN_WITHDRAW_POINTS) {
+                statusMsg.textContent = `Minimum withdrawal is ${appConfig.MIN_WITHDRAW_POINTS} points.`;
+                statusMsg.className = 'status-message error-message';
+                return;
+            }
+            if (amount > currentUser.points) {
+                statusMsg.textContent = "You don't have enough points.";
+                statusMsg.className = 'status-message error-message';
+                return;
             }
 
-            function updateProgressCircle() { document.getElementById('ads-progress').textContent = `${(watchedAdsCount % 10) * 10}%`; }
-            window.startAutoAds = function() { if (!checkDailyAdLimit() || !window.adFunctionReady) return; autoAdInterval = setInterval(watchAd, appSettings.autoAdIntervalSeconds * 1000); document.getElementById('auto-ad-btn').disabled = true; document.getElementById('stop-auto-btn').disabled = false; }
-            window.stopAutoAds = function() { clearInterval(autoAdInterval); if (window.adFunctionReady && appSettings.adsEnabled && !userData.adsDisabled) document.getElementById('auto-ad-btn').disabled = false; document.getElementById('stop-auto-btn').disabled = true; }
-            
-            window.showWithdrawForm = function() {
-                 const paymentMethods = appSettings.paymentMethodsCSV ? appSettings.paymentMethodsCSV.split(',') : ['bkash'];
-                 const selectEl = document.getElementById('payment-method');
-                 selectEl.innerHTML = '';
-                 paymentMethods.forEach(method => {
-                    const option = document.createElement('option');
-                    option.value = method.trim();
-                    option.textContent = method.trim().charAt(0).toUpperCase() + method.trim().slice(1);
-                    selectEl.appendChild(option);
-                 });
-                 document.getElementById('withdraw-section').style.display = 'block';
-            }
-            
-            window.withdrawPoints = function() {
-                const amount = parseFloat(document.getElementById('withdraw-amount').value);
-                const statusEl = document.getElementById('withdraw-status');
-                if (!amount||amount<=0||amount>earnedPoints||amount<appSettings.minWithdrawPoints){ statusEl.textContent = !amount||amount<=0?"Invalid amount.":amount>earnedPoints?"Insufficient balance.":`Minimum is ${appSettings.minWithdrawPoints} points.`; return; }
-                
-                // নতুন যুক্ত করা কোড: উইথড্রয়াল ফি ক্যালকুলেশন
-                const feePercentage = appSettings.withdrawalFeePercentage || 0;
-                const fee = (amount * feePercentage) / 100;
-                const finalAmount = amount - fee;
+            const submitBtn = document.getElementById('submitWithdrawBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-                const requestData = {
-                    userId, userName:userData.userName, amount: amount, fee: fee, finalAmount: finalAmount,
-                    method:document.getElementById('payment-method').value,
-                    phone:document.getElementById('withdraw-phone').value, status:'Pending',
-                    timestamp:new Date().toISOString()
+            try {
+                const withdrawalRequest = {
+                    userId: deviceId,
+                    userName: currentUser.name,
+                    points: amount,
+                    method: method,
+                    account: account,
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
                 };
-                database.ref('withdrawals').push().set(requestData).then(()=>{
-                    userRef.update({earnedPoints:earnedPoints-amount});
-                    logTransaction('withdraw_request', -amount, `Request for ${amount} points. Fee: ${fee.toFixed(2)}.`);
-                    statusEl.textContent='Request sent!';
-                    document.getElementById('withdraw-amount').value=document.getElementById('withdraw-phone').value='';
-                    setTimeout(()=>{document.getElementById('withdraw-section').style.display='none';statusEl.textContent='';},3000);
-                }).catch(err=>{statusEl.textContent='Error.';});
-            }
 
-            const modal = document.getElementById('appModal');
-            const modalBody = document.getElementById('modal-body');
-            window.closeModal = function() { modal.style.display = 'none'; }
-            window.showProfileModal = function() {
-                const regDate=userData.createdAt?new Date(userData.createdAt).toLocaleDateString('en-GB'):'N/A';
-                const userLevel = getUserLevel();
-                let content=`<h2>My Profile</h2>
-                <p><strong>Username:</strong> ${userData.userName} <button onclick="editUsername()" style="font-size:12px;padding:3px 6px;">Edit</button></p>
-                <p><strong>Your Referral Code:</strong> <span style="color:yellow; font-weight:bold;">${userData.userName}</span></p>
-                <p><strong>Current Level:</strong> ${userLevel.name} (Ad points x${userLevel.multiplier})</p>
-                <p><strong>Points:</strong> ${earnedPoints.toFixed(2)}</p>
-                <p><strong>Total Ads Watched:</strong> ${watchedAdsCount}</p>
-                <p><strong>Registered On:</strong> ${regDate}</p>
-                <p><strong>Total Referrals:</strong> ${userData.referralsMade || 0}</p>
-                <button onclick="showTransactionHistory()" style="width:100%; margin-top:10px;">View Full History</button>
-                <h3>Recent Withdrawals</h3>`;
-                database.ref('withdrawals').orderByChild('userId').equalTo(userId).limitToLast(5).once('value',s=>{const h=s.val();if(!h)content+="<p>No withdrawal history found.</p>";else{content+='<table><thead><tr><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';Object.values(h).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).forEach(r=>{content+=`<tr><td>${new Date(r.timestamp).toLocaleDateString()}</td><td>${r.amount}</td><td>${r.status}</td></tr>`;});content+='</tbody></table>';}modalBody.innerHTML=content;modal.style.display='block';});
-            }
-            
-            // নতুন নিয়ন্ত্রণ যুক্ত করা হয়েছে
-            window.editUsername = function() {
-                if (!userData.userName) {
-                    alert("User data is still loading. Please try again in a moment.");
-                    return;
-                }
-                const newUsername = prompt("Enter your new username (without @):", userData.userName.substring(1));
-                if (newUsername && newUsername.trim()) {
-                    const finalUsername = "@" + newUsername.trim();
-                    database.ref('users').orderByChild('userName').equalTo(finalUsername).once('value', snapshot => {
-                        if (snapshot.exists()) {
-                            alert("This username is already taken.");
-                        } else {
-                            userRef.update({ userName: finalUsername }).then(() => alert("Username updated successfully!"));
-                        }
-                    });
-                }
-            }
+                await db.ref('withdrawals').push(withdrawalRequest);
 
-            window.showTransactionHistory = function() {
-                closeModal();
-                modalBody.innerHTML = '<h2>Transaction History</h2><p>Loading...</p>';
-                modal.style.display = 'block';
-                database.ref('transactions/' + userId).orderByChild('timestamp').limitToLast(50).once('value', s => {
-                    const history = s.val();
-                    let content = '<h2>Transaction History</h2>';
-                    if (!history) {
-                        content += "<p>No transactions found.</p>";
-                    } else {
-                        content += '<table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Details</th></tr></thead><tbody>';
-                        Object.values(history).reverse().forEach(t => {
-                            content += `<tr>
-                                <td>${new Date(t.timestamp).toLocaleDateString()}</td>
-                                <td style="text-transform: capitalize;">${t.type.replace('_', ' ')}</td>
-                                <td style="color:${t.amount > 0 ? 'lightgreen' : 'salmon'};">${t.amount > 0 ? '+' : ''}${t.amount.toFixed(2)}</td>
-                                <td>${t.details}</td>
-                            </tr>`;
-                        });
-                        content += '</tbody></table>';
+                currentUser.points -= amount;
+                
+                await logTransaction(deviceId, 'debit', amount, `Withdrawal Request to ${account} (${method})`);
+                await saveUserState();
+
+                // *** নতুন যুক্ত করা কোড শুরু ***
+                try {
+                    const botToken = appConfig.TELEGRAM_BOT_TOKEN;
+                    const chatId = appConfig.TELEGRAM_CHAT_ID;
+                    if (botToken && chatId) {
+                        const message = `
+New Withdrawal Request!
+-----------------------------------
+User Name: ${currentUser.name}
+User ID: ${deviceId}
+Points: ${amount}
+Method: ${method}
+Account: ${account}
+-----------------------------------
+Please check the admin panel.
+                        `;
+                        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                        fetch(url); // নোটিফিকেশন পাঠানোর জন্য অপেক্ষা করার প্রয়োজন নেই
                     }
-                    modalBody.innerHTML = content;
-                });
-            }
-
-            window.showLeaderboard = function() {
-                modalBody.innerHTML='<h2>Top Earners</h2><p>Loading...</p>';modal.style.display='block';database.ref('users').orderByChild('earnedPoints').limitToLast(20).once('value',s=>{const u=s.val();if(!u){modalBody.innerHTML+="<p>No users found.</p>";return;}const su=Object.values(u).sort((a,b)=>(b.earnedPoints||0)-(a.earnedPoints||0));let c='<table><thead><tr><th>Rank</th><th>Username</th><th>Points</th></tr></thead><tbody>';su.forEach((ur,i)=>{if(!ur.isBanned)c+=`<tr><td>${i+1}</td><td>${ur.userName}</td><td>${(ur.earnedPoints||0).toFixed(2)}</td></tr>`;});c+='</tbody></table>';modalBody.innerHTML=c;});
-            }
-            window.showTasksModal = function() {
-                modalBody.innerHTML = '<h2>Available Tasks</h2><p>Loading tasks...</p>';
-                modal.style.display = 'block';
-                database.ref('tasks').orderByChild('isActive').equalTo(true).once('value', snapshot => {
-                    const tasks = snapshot.val();
-                    if (!tasks) {
-                        modalBody.innerHTML = '<h2>Available Tasks</h2><p>No tasks available right now. Please check back later.</p>';
-                        return;
-                    }
-                    let content = '<h2>Available Tasks</h2>';
-                    Object.values(tasks).forEach(task => {
-                        content += `<div class="task-item">
-                            <h4>${task.title} (+${task.points} Points)</h4>
-                            <p>${task.description}</p>
-                            <button onclick="window.open('${task.url}', '_blank')">Complete Task</button>
-                        </div>`;
-                    });
-                    content += "<p style='font-size:12px; color: #ccc; margin-top: 15px;'>Note: Task points are added by the admin after verification.</p>";
-                    modalBody.innerHTML = content;
-                });
-            }
-
-            window.showSupportModal = function() { modalBody.innerHTML=`<h2>Contact Support</h2><p>Describe your issue below.</p><textarea id="support-message" rows="5" placeholder="Type your message here..." style="width:100%;"></textarea><button onclick="submitSupportTicket()" style="width:100%;padding:10px;margin-top:10px;">Send Message</button>`;modal.style.display='block'; }
-            
-            // নতুন নিয়ন্ত্রণ যুক্ত করা হয়েছে
-            window.submitSupportTicket = function() {
-                const msg = document.getElementById('support-message').value.trim();
-                if (msg) {
-                    if (!userData.userName) {
-                        alert("User data is still loading. Please try again in a moment.");
-                        return;
-                    }
-                    database.ref('supportTickets').push().set({
-                        userId,
-                        userName: userData.userName,
-                        message: msg,
-                        timestamp: new Date().toISOString(),
-                        status: 'Open'
-                    }).then(() => {
-                        alert('Message sent!');
-                        closeModal();
-                    });
-                } else {
-                    alert('Please type a message.');
+                } catch (e) {
+                    console.error("Failed to send Telegram notification:", e);
                 }
+                // *** নতুন যুক্ত করা কোড শেষ ***
+
+                statusMsg.textContent = 'Withdrawal request submitted successfully!';
+                statusMsg.className = 'status-message success-message';
+                document.getElementById('withdrawAmountInput').value = '';
+                document.getElementById('withdrawAccountInput').value = '';
+
+            } catch (error) {
+                console.error("Withdrawal Error: ", error);
+                statusMsg.textContent = 'An error occurred. Please try again.';
+                statusMsg.className = 'status-message error-message';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
             }
-        } 
+        }
     </script>
 </body>
 </html>
